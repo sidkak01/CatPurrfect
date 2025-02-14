@@ -1,0 +1,13 @@
+.navbar-primary {
+    background-color: #007bff !important;
+  }
+  
+  .navbar-nav .nav-link {
+    font-weight: bold;
+    margin-right: 15px;
+  }
+  
+  .navbar-nav .nav-link i {
+    margin-right: 5px;
+  }
+  
