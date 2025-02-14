@@ -1,9 +1,20 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
-
-import { routes } from './app.routes';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { ApplicationConfig } from '@angular/core';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { HomeComponent } from './home/home.component';
+import { CatsComponent } from './cats/cats.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideClientHydration(withEventReplay())]
+  providers: [
+    provideRouter(
+      [
+        { path: '', component: HomeComponent }, // Default Home Page
+        { path: 'cats', component: CatsComponent },
+        { path: 'login', component: LoginComponent },
+        { path: 'register', component: RegisterComponent },
+      ],
+      withComponentInputBinding()
+    ),
+  ],
 };

@@ -1,32 +1,22 @@
-<nav class="navbar navbar-expand-lg navbar-primary bg-primary">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-      <!-- Home Link -->
-      <a class="navbar-brand text-white" href="#">
-        <i class="fas fa-home"></i> Home
-      </a>
+      <a class="navbar-brand" routerLink="/">Home</a>
   
-      <!-- Navbar Toggler Button (For Mobile View) -->
+      <!-- Navbar Toggler for Mobile -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
   
-      <!-- Navbar Items -->
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link text-white" href="#">
-              <i class="fas fa-list"></i> Cats
-            </a>
+            <a class="nav-link" routerLink="/cats" routerLinkActive="active">Cats</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-white" href="#">
-              <i class="fas fa-sign-in-alt"></i> Login
-            </a>
+            <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-white" href="#">
-              <i class="fas fa-user-plus"></i> Register
-            </a>
+            <a class="nav-link" routerLink="/register" routerLinkActive="active">Register</a>
           </li>
         </ul>
       </div>
