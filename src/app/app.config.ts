@@ -9,7 +9,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(
       [
-        { path: '', component: HomeComponent }, // Default Home Page
+        { path: '', component: HomeComponent }, // Default route (Home)
         { path: 'cats', component: CatsComponent },
         { path: 'login', component: LoginComponent },
         { path: 'register', component: RegisterComponent },
