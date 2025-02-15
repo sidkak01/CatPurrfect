@@ -42,4 +42,14 @@
       margin-bottom: 20px;
     }
   }
+
+  .dropdown-arrow {
+    position: absolute;
+    right: 25px;
+    top: 70%;
+    transform: translateY(-50%);
+    color: #E67E22; /* Orange Cat Color */
+    pointer-events: none; /* Prevent clicking on the icon */
+    font-size: 16px;
+  }
   
