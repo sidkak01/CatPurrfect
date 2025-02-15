@@ -1,1 +1,57 @@
-<p>cats works!</p>
+<div class="container mt-4">
+    <div class="row">
+      <!-- Left Side: Add New Cat Form -->
+      <div class="col-md-6">
+        <div class="card p-3 shadow-sm">
+          <h3 class="mb-3">Add New Cat</h3>
+  
+          <form>
+            <div class="row g-2">
+              <!-- Name Input -->
+              <div class="col-12">
+                <input type="text" class="form-control" placeholder="Cat Name" list="catList">
+                <datalist id="catList">
+                  <option value="Whiskers"></option>
+                  <option value="Mittens"></option>
+                  <option value="Shadow"></option>
+                  <option value="Tiger"></option>
+                </datalist>
+              </div>
+  
+              <!-- Weight Input -->
+              <div class="col-6">
+                <input type="text" class="form-control" placeholder="Weight">
+              </div>
+  
+              <!-- Age Input -->
+              <div class="col-6">
+                <input type="text" class="form-control" placeholder="Age">
+              </div>
+  
+              <!-- Add Button -->
+              <div class="col-12">
+                <button type="button" class="btn btn-primary w-100">
+                  <i class="fas fa-plus"></i> Add
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+  
+      <div class="col-md-6">
+        <div class="card p-3 shadow-sm">
+          <h3 class="mb-3">Your Cats</h3>
+        </div>
+      </div>
+
+      <div class="card p-3 shadow-sm mt-4">
+        <h3 class="mb-3">Map</h3>
+        <div id="map-container" class="map-box">
+          <p class="text-center">Your cats will appear here!</p>
+          <img src="assets/map_placeholder.png" alt="Cat Map" class="map-image">
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,45 @@
+/* Light Transparent Orange Background for Cards */
+.card {
+    background-color: rgba(253, 227, 167, 0.0) !important; /* Light orange with transparency */
+    border-radius: 12px;
+    border: 2px solid #E67E22; /* Orange border */
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h3 {
+    text-align: center;
+    font-weight: bold;
+    color: #D35400; /* Darker Orange */
+    font-size: 22px;
+  }
+  
+  .form-control {
+    border-radius: 5px;
+    border: 1px solid #E67E22;
+    background: rgba(255, 255, 255, 0.7); /* Semi-transparent white */
+    font-size: 16px;
+    padding: 10px;
+  }
+  
+  .btn-primary {
+    background-color: #E67E22 !important; /* Warm Orange */
+    border: none;
+    font-weight: bold;
+    color: white;
+    transition: 0.3s;
+  }
+  
+  .btn-primary:hover {
+    background-color: #D35400 !important; /* Darker Orange */
+  }
+  
+  @media (max-width: 768px) {
+    .row {
+      flex-direction: column;
+    }
+  
+    .col-md-6 {
+      margin-bottom: 20px;
+    }
+  }
+  
