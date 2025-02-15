@@ -1,11 +1,24 @@
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
-  imports: [],
+  standalone: true,
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrls: ['./register.component.css'],
+  imports: [FormsModule]
 })
 export class RegisterComponent {
+  username = '';
+  email = '';
+  password = '';
 
+  onRegister() {
+    console.log('User Registered:', {
+      username: this.username,
+      email: this.email,
+      password: this.password
+    });
+    alert('Registration Successful!');
+  }
 }

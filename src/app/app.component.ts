@@ -4,11 +4,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavbarComponent],
   standalone: true,
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  imports: [RouterOutlet, NavbarComponent],
+  templateUrl: './app.component.html'
 })
-export class AppComponent {
-  title = 'CatPurrfect';
-}
+export class AppComponent {}
