@@ -24,11 +24,10 @@ https://github.com/sidkak01/CatPurrfect
 
 ### Backend
 - Set up MongoDB database and created `cats` table.
-- Developed and tested admin login API.
 
 ### Frontend
-- Set up Angular** project and installed required dependencies.
-- Created Admin Login UI and basic Add Cat UI.
+- Set up Angular project and installed required dependencies.
+- Created login, register UI and basic Add Cat UI.
 
 ---
 
