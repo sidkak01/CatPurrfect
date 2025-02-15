@@ -2,8 +2,8 @@
 https://github.com/sidkak01/CatPurrfect
 
 # Visual Demo Links
-- **Backend:** [Google Drive Link](https://drive.google.com/file/d/1-7Fg4Wd_QKcl9q6qv0VhbamI8btN7_Mg/view?usp=drive_link)
-- **Frontend:** [Google Drive Link](https://drive.google.com/file/d/1-7Fg4Wd_QKcl9q6qv0VhbamI8btN7_Mg/view?usp=drive_link)
+- **Backend:** [Google Drive Link](https://drive.google.com/file/d/1e0uHT9ZEFH2vHgUR3Qj_ZqBwUzPcuopE/view)
+- **Frontend:** [YouTube Link](https://youtu.be/9_xht2N0GRo)
 
 ---
 
