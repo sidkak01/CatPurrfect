@@ -1,6 +1,9 @@
+# GitHub Link
+https://github.com/sidkak01/CatPurrfect
+
 # Visual Demo Links
-- **Backend:** [Google Drive Link](https://drive.google.com/file/d/1-7Fg4Wd_QKcl9q6qv0VhbamI8btN7_Mg/view?usp=drive_link)
-- **Frontend:** [Google Drive Link](https://drive.google.com/file/d/1-7Fg4Wd_QKcl9q6qv0VhbamI8btN7_Mg/view?usp=drive_link)
+- **Backend:** [Google Drive Link](https://drive.google.com/file/d/1e0uHT9ZEFH2vHgUR3Qj_ZqBwUzPcuopE/view)
+- **Frontend:** [YouTube Link](https://youtu.be/9_xht2N0GRo)
 
 ---
 
@@ -21,11 +24,10 @@
 
 ### Backend
 - Set up MongoDB database and created `cats` table.
-- Developed and tested admin login API.
 
 ### Frontend
-- Set up Angular** project and installed required dependencies.
-- Created Admin Login UI and basic Add Cat UI.
+- Set up Angular project and installed required dependencies.
+- Created login, register UI and basic Add Cat UI.
 
 ---
 
