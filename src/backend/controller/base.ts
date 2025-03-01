@@ -54,7 +54,6 @@ abstract class BaseCtrl<T> {
     }
   };
 
-  /
   delete = async (req: Request, res: Response) => {
     try {
       await this.model.findOneAndDelete({ _id: req.params.id });
