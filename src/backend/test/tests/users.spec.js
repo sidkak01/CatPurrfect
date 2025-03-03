@@ -4,9 +4,9 @@ const tslib_1 = require("tslib");
 const supertest_1 = tslib_1.__importDefault(require("supertest"));
 const globals_1 = require("@jest/globals");
 process.env.NODE_ENV = 'test';
-const app_1 = require("../app");
-const mongo_1 = require("../mongo");
-const newUser = { username: 'Dave', email: 'sidnigade@gmail.com', role: 'user' };
+const app_1 = require("../../app");
+const mongo_1 = require("../../mongo");
+const newUser = { firstName: 'John', lastName: 'Doe', username: 'JohnDoe', email: 'sidnigade@gmail.com', password: "password123", role: 'user' };
 let userId = '';
 beforeAll(async () => {
     await (0, mongo_1.connectToMongo)();
@@ -38,7 +38,7 @@ afterAll(async () => {
         (0, globals_1.expect)(res.body).toMatchObject(newUser);
     });
     (0, globals_1.test)('should update a user by id', async () => {
-        const res = await (0, supertest_1.default)(app_1.app).put(`/api/user/${userId}`).send({ username: 'siddharth' });
+        const res = await (0, supertest_1.default)(app_1.app).put(`/api/user/${userId}`).send({ username: 'JohnDoe' });
         (0, globals_1.expect)(res.statusCode).toBe(200);
     });
     (0, globals_1.test)('should delete a user by id', async () => {
