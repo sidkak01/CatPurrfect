@@ -35,16 +35,16 @@ describe('User tests', () => {
     userId = res.body._id;
   });
   test('should get a user by id', async () => {
-    const res = await request(app).get(/api/user/${userId});
+    const res = await request(app).get('/api/user/${userId}');
     expect(res.statusCode).toBe(200);
     expect(res.body).toMatchObject(newUser);
   });
   test('should update a user by id', async () => {
-    const res = await request(app).put(/api/user/${userId}).send({ username: 'siddharth' });
+    const res = await request(app).put('/api/user/${userId}').send({ username: 'siddharth' });
     expect(res.statusCode).toBe(200);
   });
   test('should delete a user by id', async () => {
-    const res = await request(app).delete(/api/user/${userId});
+    const res = await request(app).delete('/api/user/${userId}');
     expect(res.statusCode).toBe(200);
   });
 });
