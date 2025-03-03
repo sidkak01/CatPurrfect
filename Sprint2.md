@@ -1,5 +1,5 @@
 ### GitHub link: https://github.com/sidkak01/CatPurrfect
-### Video link:
+### Video link: https://youtu.be/dDLLxfCmVT4
 
 ## Tasks Completed for Sprint 2
 - Unit Tests for APIs in backend
@@ -11,6 +11,7 @@
 ### Tasks Accomplished
 - Transformed static functionality on frontend to integration with backend
 - Register form now connects to MongoDB and adds the user in the database
+- To-Do: Remove storing plaintext password in db
 - Navigation to Cats page upon successfull registration
 - Basic authentication for login
 - Add logo to home page and navbar
