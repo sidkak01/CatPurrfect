@@ -18,7 +18,7 @@
 - 'Your Cats' updates in real-time when Add Cats form is properly submitted
 - Cyprus unit/component tests for register and add cats component
 - Configure server-side rendering instead of previously using two separate client and server URLs
-- To-Do: Remove storing plaintext password in db
+- To-Do: Remove storing plaintext password in db (use the cryptography code in backend to hash it)
 
 ### Register Component Cyprus Test:
 #### This part of the file tests for 4 features: component loading, all fields in the form are present, filling out the form, and clicking the register button
