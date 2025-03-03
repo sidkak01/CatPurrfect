@@ -4,13 +4,18 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 
 ## Development server
 
-To start a local development server, run:
+To run the backend and frontend, first build the project with:
 
 ```bash
-ng serve
+npm run build
+```
+Then, start the server and webpage with:
+
+```bash
+npm run serve:ssr:CatPurrfect
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Once the server is running, open your browser and navigate to `http://localhost:5000/`. The application will automatically reload whenever you modify any of the source files.
 
 Project Name: CatPurrfect 
 
