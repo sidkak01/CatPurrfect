@@ -60,6 +60,7 @@
   });
 
 ```
+![image](https://github.com/user-attachments/assets/ad850e2e-7dbe-4467-81d8-89f65643ac69)
 
 ### Cats Component Cyprus Test:
 #### Similarly, this test makes sure the cats component is mounted, has the proper fields, and correctly updates the 'Your Cats' section when submitted
