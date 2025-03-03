@@ -1,6 +1,64 @@
 ## Tasks Completed for Sprint 2
 - Unit Tests for APIs in backend
 - Integration of backend and frontend
+- Unit tests for frontend components such as register component and cats component
+- Connect backend MongoDB with frontend and start basic integration testing
+
+## Frontend:
+### Tasks Accomplished
+- Transformed static functionality on frontend to integration with backend
+- Register form now connects to MongoDB and adds the user in the database
+- Navigation to Cats page upon successfull registration
+- Basic authentication for login
+- Add logo to home page and navbar
+- Add Cats functionality handles form input
+- 'Your Cats' updates in real-time when Add Cats form is properly submitted
+- Cyprus unit/component tests for register and add cats component
+- Configure server-side rendering instead of previously using two separate client and server URLs
+
+### Register Component Cyprus Test
+```typescript
+it('Should mount the component', () => {  // basic test for mounting the component
+    cy.get('h2').should('contain.text', 'Register');
+  });
+
+  it('Should have all form fields', () => {     // ensuring all the form fields are expected
+    cy.get('input[name="firstName"]').should('exist');
+    cy.get('input[name="lastName"]').should('exist');
+    cy.get('input[name="username"]').should('exist');
+    cy.get('input[name="email"]').should('exist');
+    cy.get('input[name="password"]').should('exist');
+    cy.get('input[name="confirmPassword"]').should('exist');
+    cy.get('button[type="submit"]').should('exist');
+  });
+
+  it('Should allow filling out the form', () => {       // test filling out the form
+    cy.get('input[name="firstName"]').type('Test');
+    cy.get('input[name="lastName"]').type('User');
+    cy.get('input[name="username"]').type('testuser');
+    cy.get('input[name="email"]').type('testuser@example.com');
+    cy.get('input[name="password"]').type('password123');
+    cy.get('input[name="confirmPassword"]').type('password123');
+    
+    cy.get('input[name="firstName"]').should('have.value', 'Test');
+    cy.get('input[name="lastName"]').should('have.value', 'User');
+    cy.get('input[name="username"]').should('have.value', 'testuser');
+    cy.get('input[name="email"]').should('have.value', 'testuser@example.com');
+    cy.get('input[name="password"]').should('have.value', 'password123');
+    cy.get('input[name="confirmPassword"]').should('have.value', 'password123');
+  });
+
+  it('Should allow button to be clicked', () => {   // register button is clickable
+    cy.window().then(win => {
+      cy.spy(win, 'alert').as('alertSpy');
+    });
+    
+    cy.get('button[type="submit"]').click();
+    
+    cy.get('@alertSpy').should('be.called');
+  });
+
+```
 ## BackEnd:
 ### Tasks Accomplished
 - Developed User Authentication APIs
@@ -27,8 +85,10 @@
 #### **Request Body:**
 ```json
 {
+  "firstName: Test",
+  "lastName: User",
+  "username": "testuser",
   "email": "sidnigade@gmail.com",
-  "username": "sidNigade",
   "password": "password123",
   "role": "user"
 }
@@ -45,7 +105,7 @@
 **Error (400 Bad Request - Missing Fields)**
 ```json
 {
-  "error": "Email, username, and password are required"
+  "error": "First Name, Last Name, Email, username, and password are required"
 }
 ```
 
@@ -106,7 +166,7 @@
 [
   {
     "_id": "123456789",
-    "username": "sidnigade",
+    "username": "testuser",
     "email": "sidnigade@gmail.com",
     "role": "user"
   }
@@ -140,7 +200,7 @@
 ```json
 {
   "_id": "123456789",
-  "username": "sidnigade",
+  "username": "testuser",
   "email": "sidnigade@gmail.com",
   "role": "user"
 }
