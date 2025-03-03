@@ -4,22 +4,22 @@
         <div class="card p-3 shadow-sm">
           <h3 class="mb-3">Add New Cat</h3>
   
-          <form>
+          <form (ngSubmit)="addCat()" #catForm="ngForm">
             <div class="row g-2">
               <div class="col-12">
-                <input type="text" class="form-control" placeholder="Cat Name">
+                <input type="text" class="form-control" placeholder="Cat Name" name="name" [(ngModel)]="newCat.name" required>
               </div>
-  
+    
               <div class="col-6">
-                <input type="text" class="form-control" placeholder="Weight">
+                <input type="text" class="form-control" placeholder="Weight" name="weight" [(ngModel)]="newCat.weight">
               </div>
-  
+    
               <div class="col-6">
-                <input type="text" class="form-control" placeholder="Age">
+                <input type="text" class="form-control" placeholder="Age" name="age" [(ngModel)]="newCat.age">
               </div>
 
               <div class="col-12">
-                <select class="form-control" id="breedSelect">
+                <select class="form-control" id="breedSelect" name="breed" [(ngModel)]="newCat.breed">
                   <option value="" disabled selected>Select a Breed</option>
                   <option value="Abyssinian">Abyssinian</option>
                   <option value="Aegean">Aegean</option>
@@ -67,7 +67,7 @@
               </div>              
   
               <div class="col-12">
-                <button type="button" class="btn btn-primary w-100">
+                <button type="submit" class="btn btn-primary w-100">
                   <i class="fas fa-plus"></i> Add
                 </button>
               </div>
@@ -79,6 +79,22 @@
       <div class="col-md-6">
         <div class="card p-3 shadow-sm">
           <h3 class="mb-3">Your Cats</h3>
+          
+          <!-- Display cats list -->
+          <div *ngIf="cats.length === 0" class="text-center text-muted">
+            No cats added yet
+          </div>
+          
+          <div *ngFor="let cat of cats" class="card mb-2">
+            <div class="card-body">
+              <h5 class="card-title">{{ cat.name }}</h5>
+              <p class="card-text">
+                <span *ngIf="cat.breed">Breed: {{ cat.breed }}</span>
+                <span *ngIf="cat.age" class="ms-2">Age: {{ cat.age }}</span>
+                <span *ngIf="cat.weight" class="ms-2">Weight: {{ cat.weight }}</span>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
