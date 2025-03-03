@@ -16,9 +16,10 @@
 - Cyprus unit/component tests for register and add cats component
 - Configure server-side rendering instead of previously using two separate client and server URLs
 
-### Register Component Cyprus Test
+### Register Component Cyprus Test:
+#### This part of the file tests for 4 features: component loading, all fields in the form are present, filling out the form, and clicking the register button
 ```typescript
-it('Should mount the component', () => {  // basic test for mounting the component
+  it('Should mount the component', () => {  // basic test for mounting the component
     cy.get('h2').should('contain.text', 'Register');
   });
 
@@ -59,7 +60,45 @@ it('Should mount the component', () => {  // basic test for mounting the compone
   });
 
 ```
-## BackEnd:
+
+### Cats Component Cyprus Test:
+#### Similarly, this test makes sure the cats component is mounted, has the proper fields, and correctly updates the 'Your Cats' section when submitted
+```typescript
+  it('Should mount the component', () => {
+    cy.get('h3').should('contain.text', 'Add New Cat');
+  });
+
+  it('Should have a form with all required fields', () => {     // Make sure all the expected fields are present in the form
+    cy.get('input[name="name"]').should('exist');
+    cy.get('input[name="weight"]').should('exist');
+    cy.get('input[name="age"]').should('exist');
+    cy.get('select[name="breed"]').should('exist');
+    cy.get('button[type="submit"]').should('exist');
+  });
+
+  it('Should add a cat when form is submitted', () => {
+    cy.get('.text-muted').should('contain.text', 'No cats added yet');
+    
+    // Fill out the form and then submit
+    cy.get('input[name="name"]').type('Whiskers');
+    cy.get('input[name="weight"]').type('10 lbs');
+    cy.get('input[name="age"]').type('3');
+    cy.get('select[name="breed"]').select('Siamese');
+    
+    cy.get('button[type="submit"]').click();
+    
+    // Check if the cat was added to the list with correct attributes
+    cy.get('.card-title').should('contain.text', 'Whiskers');
+    cy.get('.card-text').should('contain.text', 'Breed: Siamese');
+    cy.get('.card-text').should('contain.text', 'Age: 3');
+    cy.get('.card-text').should('contain.text', 'Weight: 10 lbs');
+    
+    cy.get('input[name="name"]').should('have.value', '');
+  });
+```
+![image](https://github.com/user-attachments/assets/3843c1f2-16be-4d53-96f9-695875bbf5e8)
+
+## Backend:
 ### Tasks Accomplished
 - Developed User Authentication APIs
 - Register User API
@@ -85,8 +124,8 @@ it('Should mount the component', () => {  // basic test for mounting the compone
 #### **Request Body:**
 ```json
 {
-  "firstName: Test",
-  "lastName: User",
+  "firstName": Test",
+  "lastName": User",
   "username": "testuser",
   "email": "sidnigade@gmail.com",
   "password": "password123",
