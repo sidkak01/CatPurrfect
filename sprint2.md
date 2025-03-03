@@ -1,3 +1,6 @@
+Video link:
+GitHub link: https://github.com/sidkak01/CatPurrfect
+
 ## Tasks Completed for Sprint 2
 - Unit Tests for APIs in backend
 - Integration of backend and frontend
