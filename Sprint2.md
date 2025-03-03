@@ -11,7 +11,6 @@
 ### Tasks Accomplished
 - Transformed static functionality on frontend to integration with backend
 - Register form now connects to MongoDB and adds the user in the database
-- To-Do: Remove storing plaintext password in db
 - Navigation to Cats page upon successfull registration
 - Basic authentication for login
 - Add logo to home page and navbar
@@ -19,6 +18,7 @@
 - 'Your Cats' updates in real-time when Add Cats form is properly submitted
 - Cyprus unit/component tests for register and add cats component
 - Configure server-side rendering instead of previously using two separate client and server URLs
+- To-Do: Remove storing plaintext password in db
 
 ### Register Component Cyprus Test:
 #### This part of the file tests for 4 features: component loading, all fields in the form are present, filling out the form, and clicking the register button
@@ -129,8 +129,8 @@
 #### **Request Body:**
 ```json
 {
-  "firstName": Test",
-  "lastName": User",
+  "firstName": "Test",
+  "lastName": "User",
   "username": "testuser",
   "email": "sidnigade@gmail.com",
   "password": "password123",
