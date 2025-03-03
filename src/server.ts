@@ -5,14 +5,23 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
+import cors from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { app as backendApp } from './backend/app';
+import { connectToMongo, disconnectMongo } from './backend/mongo';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
 
 const app = express();
+app.use(cors());
+app.use(express.json());
+
 const angularApp = new AngularNodeAppEngine();
+
+// Mount backend API - this needs to come before the static files middleware
+app.use('/', backendApp);
 
 /**
  * Example Express Rest API endpoints can be defined here.
@@ -55,8 +64,24 @@ app.use('/**', (req, res, next) => {
  */
 if (isMainModule(import.meta.url)) {
   const port = process.env['PORT'] || 4000;
-  app.listen(port, () => {
-    console.log(`Node Express server listening on http://localhost:${port}`);
+  
+  // Connect to MongoDB when server starts
+  connectToMongo()
+    .then(() => {
+      console.log('Connected to MongoDB');
+      app.listen(port, () => {
+        console.log(`Node Express server listening on http://localhost:${port}`);
+      });
+    })
+    .catch(err => {
+      console.error('Failed to connect to MongoDB:', err);
+      process.exit(1);
+    });
+    
+  // Handle shutdown gracefully
+  process.on('SIGINT', async () => {
+    await disconnectMongo();
+    process.exit(0);
   });
 }
 
