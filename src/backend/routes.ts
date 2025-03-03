@@ -1,6 +1,6 @@
 import { Router, Application } from 'express';
 
-import UserCtrl from './controllers/user';
+import UserCtrl from './controller/user';
 
 const setRoutes = (app: Application): void => {
   const router = Router();

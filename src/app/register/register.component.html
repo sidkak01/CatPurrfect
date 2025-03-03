@@ -6,14 +6,19 @@
   
           <form (ngSubmit)="onRegister()">
             <div class="mb-3">
-              <label for="username" class="form-label">First Name</label>
-              <input type="text" id="username" class="form-control" [(ngModel)]="username" name="username" required>
+              <label for="firstName" class="form-label">First Name</label>
+              <input type="text" id="firstName" class="form-control" [(ngModel)]="firstName" name="firstName" required>
             </div>
 
             <div class="mb-3">
-                <label for="username" class="form-label">Last Name</label>
-                <input type="text" id="username" class="form-control" [(ngModel)]="username" name="username" required>
-              </div>
+              <label for="lastName" class="form-label">Last Name</label>
+              <input type="text" id="lastName" class="form-control" [(ngModel)]="lastName" name="lastName" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input type="text" id="username" class="form-control" [(ngModel)]="username" name="username" required>
+            </div>
   
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
@@ -26,8 +31,8 @@
             </div>
 
             <div class="mb-3">
-                <label for="password" class="form-label">Confirm Password</label>
-                <input type="password" id="password" class="form-control" [(ngModel)]="password" name="password" required>
+                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                <input type="password" id="confirmPassword" class="form-control" [(ngModel)]="confirmPassword" name="confirmPassword" required>
               </div>
   
             <button type="submit" class="btn btn-primary w-100">Register</button>
