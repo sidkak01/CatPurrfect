@@ -1,53 +1,59 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { UserService } from '../services/user.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-register',
   standalone: true,
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.css'],
+  imports: [RouterLink, FormsModule]
 })
 export class RegisterComponent {
-  registerForm: FormGroup;
+  firstName = '';
+  lastName = '';
+  username = '';
+  email = '';
+  password = '';
+  confirmPassword = '';
 
-  constructor(private fb: FormBuilder, private userService: UserService, private router: Router) {
-    this.registerForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z\s]+$/)]],
-      lastName: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z\s]+$/)]],
-      username: ['', [Validators.required, Validators.minLength(3)]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]+$/)]],
-      confirmPassword: ['', Validators.required]
-    });
-  }
+  constructor(private userService: UserService, private router: Router) {}
 
   onRegister() {
-    if (this.registerForm.invalid) {
-      alert('Please fill in all fields correctly.');
-      return;
-    }
-
-    if (this.registerForm.value.password !== this.registerForm.value.confirmPassword) {
+    if (this.password !== this.confirmPassword) {
       alert('Passwords do not match');
       return;
     }
 
-    const user = this.registerForm.value;
-    delete user.confirmPassword;
+    const user = {
+      firstName: this.firstName,
+      lastName: this.lastName,
+      username: this.username,
+      email: this.email,
+      password: this.password
+    };
 
     this.userService.register(user).subscribe({
       next: (response) => {
         console.log('Registration successful', response);
         alert('Registration Successful!');
         this.router.navigate(['/cats']);
-        this.registerForm.reset();
+        this.resetForm();
       },
       error: (error) => {
         console.error('Registration failed', error);
         alert('Registration failed: ' + (error.error?.message || 'Please try again.'));
       }
     });
+  }
+
+  resetForm() {
+    this.firstName = '';
+    this.lastName = '';
+    this.username = '';
+    this.email = '';
+    this.password = '';
+    this.confirmPassword = '';
   }
 }
