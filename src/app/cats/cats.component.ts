@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../services/auth.service';
 
 interface Cat {
   name: string;
@@ -24,7 +25,19 @@ export class CatsComponent {
     breed: ''
   };
 
+  isLoggedIn = false;
+  
   cats: Cat[] = [];
+
+  constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.isLoggedIn = this.authService.getLoggedInValue();
+    
+    this.authService.isLoggedIn().subscribe(status => {
+      this.isLoggedIn = status;
+    });
+  }
 
   addCat(): void {
     if (this.newCat.name) {

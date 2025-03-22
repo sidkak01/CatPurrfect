@@ -1,110 +1,129 @@
-<div class="container mt-4">
-    <div class="row">
-      <div class="col-md-6">
-        <div class="card p-3 shadow-sm">
-          <h3 class="mb-3">Add New Cat</h3>
-  
-          <form (ngSubmit)="addCat()" #catForm="ngForm">
-            <div class="row g-2">
-              <div class="col-12">
-                <input type="text" class="form-control" placeholder="Cat Name" name="name" [(ngModel)]="newCat.name" required>
-              </div>
+<div *ngIf="!isLoggedIn" class="container mt-4">
+  <div class="text-center">
+    <h2>Add and Track Your Cats Here!</h2>
+    <p>Login or create an account to get started</p>
     
-              <div class="col-6">
-                <input type="text" class="form-control" placeholder="Weight" name="weight" [(ngModel)]="newCat.weight">
-              </div>
-    
-              <div class="col-6">
-                <input type="text" class="form-control" placeholder="Age" name="age" [(ngModel)]="newCat.age">
-              </div>
-
-              <div class="col-12">
-                <select class="form-control" id="breedSelect" name="breed" [(ngModel)]="newCat.breed">
-                  <option value="" disabled selected>Select a Breed</option>
-                  <option value="Abyssinian">Abyssinian</option>
-                  <option value="Aegean">Aegean</option>
-                  <option value="American Bobtail">American Bobtail</option>
-                  <option value="American Curl">American Curl</option>
-                  <option value="American Shorthair">American Shorthair</option>
-                  <option value="American Wirehair">American Wirehair</option>
-                  <option value="Arabian Mau">Arabian Mau</option>
-                  <option value="Asian">Asian</option>
-                  <option value="Australian Mist">Australian Mist</option>
-                  <option value="Balinese">Balinese</option>
-                  <option value="Bengal">Bengal</option>
-                  <option value="Birman">Birman</option>
-                  <option value="Bombay">Bombay</option>
-                  <option value="Brazilian Shorthair">Brazilian Shorthair</option>
-                  <option value="British Longhair">British Longhair</option>
-                  <option value="British Shorthair">British Shorthair</option>
-                  <option value="Burmese">Burmese</option>
-                  <option value="Burmilla">Burmilla</option>
-                  <option value="Chartreux">Chartreux</option>
-                  <option value="Chausie">Chausie</option>
-                  <option value="Cornish Rex">Cornish Rex</option>
-                  <option value="Devon Rex">Devon Rex</option>
-                  <option value="Egyptian Mau">Egyptian Mau</option>
-                  <option value="Exotic Shorthair">Exotic Shorthair</option>
-                  <option value="Himalayan">Himalayan</option>
-                  <option value="Japanese Bobtail">Japanese Bobtail</option>
-                  <option value="Korat">Korat</option>
-                  <option value="Maine Coon">Maine Coon</option>
-                  <option value="Manx">Manx</option>
-                  <option value="Norwegian Forest Cat">Norwegian Forest Cat</option>
-                  <option value="Ocicat">Ocicat</option>
-                  <option value="Oriental Shorthair">Oriental Shorthair</option>
-                  <option value="Persian">Persian</option>
-                  <option value="Ragdoll">Ragdoll</option>
-                  <option value="Russian Blue">Russian Blue</option>
-                  <option value="Scottish Fold">Scottish Fold</option>
-                  <option value="Siamese">Siamese</option>
-                  <option value="Siberian">Siberian</option>
-                  <option value="Sphynx">Sphynx</option>
-                  <option value="Turkish Angora">Turkish Angora</option>
-                  <option value="Turkish Van">Turkish Van</option>
-                </select>
-                <i class="fas fa-chevron-down dropdown-arrow"></i>
-              </div>              
-  
-              <div class="col-12">
-                <button type="submit" class="btn btn-primary w-100">
-                  <i class="fas fa-plus"></i> Add
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
+    <div class="card p-4 shadow-sm">
+      <div class="text-center my-4">
+        <img src="../../assets/cats_page_gif-ezgif.gif" alt="Cat Management Walkthrough" class="img-fluid">
       </div>
-  
-      <div class="col-md-6">
-        <div class="card p-3 shadow-sm">
-          <h3 class="mb-3">Your Cats</h3>
-          
-          <!-- Display cats list -->
-          <div *ngIf="cats.length === 0" class="text-center text-muted">
-            No cats added yet
-          </div>
-          
-          <div *ngFor="let cat of cats" class="card mb-2">
-            <div class="card-body">
-              <h5 class="card-title">{{ cat.name }}</h5>
-              <p class="card-text">
-                <span *ngIf="cat.breed">Breed: {{ cat.breed }}</span>
-                <span *ngIf="cat.age" class="ms-2">Age: {{ cat.age }}</span>
-                <span *ngIf="cat.weight" class="ms-2">Weight: {{ cat.weight }}</span>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card p-3 shadow-sm mt-4">
-        <h3 class="mb-3">Map</h3>
-        <div id="map-container" class="map-box">
-          <p class="text-center">Your cats live location will appear here!</p>
-          <img src="assets/map_placeholder.png" alt="Cat Map" class="map-image">
-        </div>
+      
+      <div class="mt-4">
+        <a routerLink="/login" class="btn btn-primary">Login to Continue</a>
       </div>
     </div>
   </div>
+</div>
+
+<div *ngIf="isLoggedIn">
+  <div class="container mt-4">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card p-3 shadow-sm">
+            <h3 class="mb-3">Add New Cat</h3>
+    
+            <form (ngSubmit)="addCat()" #catForm="ngForm">
+              <div class="row g-2">
+                <div class="col-12">
+                  <input type="text" class="form-control" placeholder="Cat Name" name="name" [(ngModel)]="newCat.name" required>
+                </div>
+      
+                <div class="col-6">
+                  <input type="text" class="form-control" placeholder="Weight" name="weight" [(ngModel)]="newCat.weight">
+                </div>
+      
+                <div class="col-6">
+                  <input type="text" class="form-control" placeholder="Age" name="age" [(ngModel)]="newCat.age">
+                </div>
+
+                <div class="col-12">
+                  <select class="form-control" id="breedSelect" name="breed" [(ngModel)]="newCat.breed">
+                    <option value="" disabled selected>Select a Breed</option>
+                    <option value="Abyssinian">Abyssinian</option>
+                    <option value="Aegean">Aegean</option>
+                    <option value="American Bobtail">American Bobtail</option>
+                    <option value="American Curl">American Curl</option>
+                    <option value="American Shorthair">American Shorthair</option>
+                    <option value="American Wirehair">American Wirehair</option>
+                    <option value="Arabian Mau">Arabian Mau</option>
+                    <option value="Asian">Asian</option>
+                    <option value="Australian Mist">Australian Mist</option>
+                    <option value="Balinese">Balinese</option>
+                    <option value="Bengal">Bengal</option>
+                    <option value="Birman">Birman</option>
+                    <option value="Bombay">Bombay</option>
+                    <option value="Brazilian Shorthair">Brazilian Shorthair</option>
+                    <option value="British Longhair">British Longhair</option>
+                    <option value="British Shorthair">British Shorthair</option>
+                    <option value="Burmese">Burmese</option>
+                    <option value="Burmilla">Burmilla</option>
+                    <option value="Chartreux">Chartreux</option>
+                    <option value="Chausie">Chausie</option>
+                    <option value="Cornish Rex">Cornish Rex</option>
+                    <option value="Devon Rex">Devon Rex</option>
+                    <option value="Egyptian Mau">Egyptian Mau</option>
+                    <option value="Exotic Shorthair">Exotic Shorthair</option>
+                    <option value="Himalayan">Himalayan</option>
+                    <option value="Japanese Bobtail">Japanese Bobtail</option>
+                    <option value="Korat">Korat</option>
+                    <option value="Maine Coon">Maine Coon</option>
+                    <option value="Manx">Manx</option>
+                    <option value="Norwegian Forest Cat">Norwegian Forest Cat</option>
+                    <option value="Ocicat">Ocicat</option>
+                    <option value="Oriental Shorthair">Oriental Shorthair</option>
+                    <option value="Persian">Persian</option>
+                    <option value="Ragdoll">Ragdoll</option>
+                    <option value="Russian Blue">Russian Blue</option>
+                    <option value="Scottish Fold">Scottish Fold</option>
+                    <option value="Siamese">Siamese</option>
+                    <option value="Siberian">Siberian</option>
+                    <option value="Sphynx">Sphynx</option>
+                    <option value="Turkish Angora">Turkish Angora</option>
+                    <option value="Turkish Van">Turkish Van</option>
+                  </select>
+                  <i class="fas fa-chevron-down dropdown-arrow"></i>
+                </div>              
+    
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-plus"></i> Add
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+    
+        <div class="col-md-6">
+          <div class="card p-3 shadow-sm">
+            <h3 class="mb-3">Your Cats</h3>
+            
+            <!-- Display cats list -->
+            <div *ngIf="cats.length === 0" class="text-center text-muted">
+              No cats added yet
+            </div>
+            
+            <div *ngFor="let cat of cats" class="card mb-2">
+              <div class="card-body">
+                <h5 class="card-title">{{ cat.name }}</h5>
+                <p class="card-text">
+                  <span *ngIf="cat.breed">Breed: {{ cat.breed }}</span>
+                  <span *ngIf="cat.age" class="ms-2">Age: {{ cat.age }}</span>
+                  <span *ngIf="cat.weight" class="ms-2">Weight: {{ cat.weight }}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card p-3 shadow-sm mt-4">
+          <h3 class="mb-3">Map</h3>
+          <div id="map-container" class="map-box">
+            <p class="text-center">Your cats live location will appear here!</p>
+            <img src="assets/map_placeholder.png" alt="Cat Map" class="map-image">
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
   

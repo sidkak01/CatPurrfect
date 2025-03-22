@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../services/user.service';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -18,7 +19,7 @@ export class RegisterComponent {
   password = '';
   confirmPassword = '';
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(private userService: UserService, private router: Router, private authService: AuthService) {}
 
   onRegister() {
     if (this.password !== this.confirmPassword) {
@@ -38,6 +39,7 @@ export class RegisterComponent {
       next: (response) => {
         console.log('Registration successful', response);
         alert('Registration Successful!');
+        this.authService.setLoggedIn(true);
         this.router.navigate(['/cats']);
         this.resetForm();
       },
