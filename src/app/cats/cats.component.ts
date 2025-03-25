@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
+import { RouterLink } from '@angular/router';
 
 interface Cat {
   name: string;
@@ -13,7 +14,7 @@ interface Cat {
 @Component({
   selector: 'app-cats',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './cats.component.html',
   styleUrl: './cats.component.css'
 })
