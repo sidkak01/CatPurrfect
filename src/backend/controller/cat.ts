@@ -1,4 +1,4 @@
-import Cat, { ICat } from '../models/cat';
+import Cat, { ICat } from '../model/cat';
 import BaseCtrl from './base';
 
 class CatCtrl extends BaseCtrl<ICat> {
