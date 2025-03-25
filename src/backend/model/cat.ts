@@ -2,14 +2,16 @@ import { model, Schema } from 'mongoose';
 
 interface ICat {
   name: string;
-  weight: number;
-  age: number;
+  weight: number | string;
+  age: number | string;
+  breed: string;
 }
 
 const catSchema = new Schema<ICat>({
   name: String,
-  weight: Number,
-  age: Number
+  weight: { type: Schema.Types.Mixed },
+  age: { type: Schema.Types.Mixed },
+  breed: String
 });
 
 const Cat = model<ICat>('Cat', catSchema);

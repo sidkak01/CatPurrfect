@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { RouterLink } from '@angular/router';
+import { CatService } from '../services/cat.service';
 
 interface Cat {
   name: string;
@@ -30,7 +31,7 @@ export class CatsComponent {
   
   cats: Cat[] = [];
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private catService: CatService) {}
 
   ngOnInit(): void {
     this.isLoggedIn = this.authService.getLoggedInValue();
@@ -44,6 +45,16 @@ export class CatsComponent {
     if (this.newCat.name) {
       // Add cat to array (frontend only for now)
       this.cats.push({...this.newCat});
+
+      // Also save to MongoDB
+      this.catService.addCat(this.newCat).subscribe({
+        next: (savedCat) => {
+          console.log('Cat saved to database:', savedCat);
+        },
+        error: (err) => {
+          console.error('Error saving cat to database:', err);
+        }
+      });
       
       this.newCat = {
         name: '',

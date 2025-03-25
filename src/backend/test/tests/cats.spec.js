@@ -6,7 +6,7 @@ const globals_1 = require("@jest/globals");
 process.env.NODE_ENV = 'test';
 const app_1 = require("../../app");
 const mongo_1 = require("../../mongo");
-const newCat = { name: 'Fluffy', weight: 4, age: 2 };
+const newCat = { name: 'Fluffy', weight: 4, age: 2, breed: 'Bengal' };
 let catId = '';
 beforeAll(async () => {
     await (0, mongo_1.connectToMongo)();
