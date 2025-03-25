@@ -1,12 +1,21 @@
 import { Router, Application } from 'express';
 
-import UserCtrl from './controller/user';
-import CatCtrl from './controller/cat';
+import CatCtrl from './controllers/cat';
+import UserCtrl from './controllers/user';
 
 const setRoutes = (app: Application): void => {
   const router = Router();
+  const catCtrl = new CatCtrl();
   const userCtrl = new UserCtrl();
   const catCtrl = new CatCtrl();
+
+ 
+  router.route('/cats').get(catCtrl.getAll);
+  router.route('/cats/count').get(catCtrl.count);
+  router.route('/cat').post(catCtrl.insert);
+  router.route('/cat/:id').get(catCtrl.get);
+  router.route('/cat/:id').put(catCtrl.update);
+  router.route('/cat/:id').delete(catCtrl.delete);
 
   router.route('/login').post(userCtrl.login);
   router.route('/users').get(userCtrl.getAll);
