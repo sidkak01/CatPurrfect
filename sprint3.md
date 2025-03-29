@@ -25,8 +25,8 @@ json
 {
   "name": "Whiskers",
   "age": 2,
-  "breed": "Siamese",
-  "owner": "John Doe"
+  "breed": "abcd",
+  "owner": "sid kak"
 }
 
 #### **Response:**
@@ -77,8 +77,8 @@ json
     "_id": "987654321",
     "name": "Whiskers",
     "age": 2,
-    "breed": "Siamese",
-    "owner": "John Doe"
+    "breed": "abcd",
+    "owner": "sid kak"
   }
 ]
 
@@ -96,8 +96,8 @@ json
   "_id": "987654321",
   "name": "Whiskers",
   "age": 2,
-  "breed": "Siamese",
-  "owner": "John Doe"
+  "breed": "abcd",
+  "owner": "sid kak"
 }
 
 **Error (404 Not Found)**
@@ -143,7 +143,7 @@ json
 #### **Request Body:**
 json
 {
-  "email": "admin@example.com",
+  "email": "sid@abcd.com",
   "password": "adminpass"
 }
 
