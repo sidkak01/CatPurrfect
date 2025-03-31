@@ -41,7 +41,7 @@ export class CatsComponent {
 
   isInteractingWithCatOrMap = false;
 
-  center: google.maps.LatLngLiteral = { lat: 40.7128, lng: -74.0060 };
+  center: google.maps.LatLngLiteral = { lat: 29.65163, lng:  -82.32483 };
   zoom = 10;
   mapOptions: google.maps.MapOptions = {
     mapTypeId: google.maps.MapTypeId.ROADMAP,
