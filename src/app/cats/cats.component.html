@@ -19,7 +19,7 @@
   <div class="container mt-4">
       <div class="row">
         <div class="col-md-6">
-          <div class="card p-3 shadow-sm">
+          <div class="card p-3 shadow-sm" (click)="onFormInteraction($event)">
             <h3 class="mb-3">Add New Cat</h3>
     
             <form (ngSubmit)="addCat()" #catForm="ngForm">
@@ -103,7 +103,9 @@
               No cats added yet
             </div>
             
-            <div *ngFor="let cat of cats" class="card mb-2">
+            <div *ngFor="let cat of cats" class="card mb-2"
+              [class.selected-cat]="selectedCat === cat"
+              (click)="selectCat(cat, $event)">
               <div class="card-body">
                 <h5 class="card-title">{{ cat.name }}</h5>
                 <p class="card-text">
@@ -111,6 +113,9 @@
                   <span *ngIf="cat.age" class="ms-2">Age: {{ cat.age }}</span>
                   <span *ngIf="cat.weight" class="ms-2">Weight: {{ cat.weight }}</span>
                 </p>
+                <div *ngIf="cat.location" class="location-badge">
+                  <i class="fas fa-map-marker-alt"></i> Location Added
+                </div>
               </div>
             </div>
           </div>
@@ -118,10 +123,21 @@
 
         <div class="card p-3 shadow-sm mt-4">
           <h3 class="mb-3">Map</h3>
-          <div id="map-container" class="map-box">
-            <p class="text-center">Your cats live location will appear here!</p>
-            <img src="assets/map_placeholder.png" alt="Cat Map" class="map-image">
+          <div class="map-instructions mb-3">
+            <i class="fas fa-info-circle"></i> 
+            <span *ngIf="!selectedCat">Select a cat from the list above, then click on the map to add its location.</span>
+            <span *ngIf="selectedCat">Click anywhere on the map to set <strong>{{ selectedCat.name }}'s</strong> location.</span>
           </div>
+          
+          <google-map
+            height="400px"
+            width="100%"
+            [center]="center"
+            [zoom]="zoom"
+            [options]="mapOptions"
+            (mapClick)="onMapClick($event)"
+            (mapInitialized)="onMapInitialized($event)">            
+          </google-map>
         </div>
       </div>
     </div>
