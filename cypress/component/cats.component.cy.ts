@@ -1,11 +1,28 @@
 import { CatsComponent } from '../../src/app/cats/cats.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../src/app/services/auth.service';
+import { BehaviorSubject } from 'rxjs';
 
 describe('CatsComponent', () => {
   beforeEach(() => {
+    // Create a mock AuthService
+    const mockLoggedInSubject = new BehaviorSubject<boolean>(true);
+    
+    const authServiceMock = {
+      isLoggedIn: () => mockLoggedInSubject.asObservable(),
+      getLoggedInValue: () => mockLoggedInSubject.value,
+      setLoggedIn: (value: boolean) => mockLoggedInSubject.next(value)
+    };
+
+    // Mount the component with the mock service
     cy.mount(CatsComponent, {
-      imports: [FormsModule, CommonModule]
+      imports: [FormsModule, CommonModule],
+      providers: [
+        { provide: AuthService, useValue: authServiceMock }
+      ]
+    }).then(() => {
+      cy.get('body').should('exist');
     });
   });
 
@@ -13,7 +30,7 @@ describe('CatsComponent', () => {
     cy.get('h3').should('contain.text', 'Add New Cat');
   });
 
-  it('Should have a form with all required fields', () => {     // Make sure all the expected fields are present in the form
+  it('Should have a form with all required fields', () => {
     cy.get('input[name="name"]').should('exist');
     cy.get('input[name="weight"]').should('exist');
     cy.get('input[name="age"]').should('exist');

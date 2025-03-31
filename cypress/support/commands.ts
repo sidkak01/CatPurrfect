@@ -41,15 +41,11 @@ Cypress.Commands.add('login', () => {
     cy.get('input[name="email"]').type('test@example.com');
     cy.get('input[name="password"]').type('password123');
     cy.contains('button', 'Login').click();
-    cy.url().should('include', '/cats'); // Or wherever login redirects to
+    cy.url().should('include', '/cats');
   });
 
   declare namespace Cypress {
     interface Chainable<Subject = any> {
-      /**
-       * Custom command to log in with test credentials
-       * @example cy.login()
-       */
       login(): Chainable<void>
     }
   }

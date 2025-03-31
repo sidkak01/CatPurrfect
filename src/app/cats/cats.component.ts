@@ -17,7 +17,6 @@ interface Cat {
   };
 }
 
-
 @Component({
   selector: 'app-cats',
   standalone: true,
