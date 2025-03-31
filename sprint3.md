@@ -22,7 +22,7 @@
 - User can select a cat and click anywhere on the map to add the location of the cat
 - Location badges added that when clicked, show the cat attributes
 - If a user is logged in, there becomes a "Logout" button added to the navbar that properly logs out when clicked on
-- Login component cyprus test and add cats/location e2e tests
+- Login component cyprus test and add cats/add location e2e tests
 
 ### Login Component Cyprus Test:
 ```typescript
@@ -107,6 +107,68 @@ Cypress.Commands.add('login', () => {
       login(): Chainable<void>
     }
   }
+```
+
+### Add Cats E2E Test:
+#### (Was formerly a component test in Sprint 3 before advanced authentication was added)
+```typescript
+import '../support/commands';
+
+describe('Cat Management', () => {
+    beforeEach(() => {
+        cy.login();
+        cy.contains('h3', 'Add New Cat').should('be.visible');
+      });
+  
+    it('Should add a new cat', () => {
+      cy.contains('h3', 'Add New Cat').should('be.visible');
+      
+      cy.get('input[name="name"]').type('Whiskers');
+      cy.get('input[name="weight"]').type('10 lbs');
+      cy.get('input[name="age"]').type('3 years');
+      cy.get('select[name="breed"]').select('Maine Coon');
+      
+      cy.contains('button', 'Add').click();
+      
+      cy.contains('.card-title', 'Whiskers').should('be.visible');
+      cy.contains('.card-text', 'Breed: Maine Coon').should('be.visible');
+      cy.contains('.card-text', 'Age: 3 years').should('be.visible');
+      cy.contains('.card-text', 'Weight: 10 lbs').should('be.visible');
+      
+      cy.get('input[name="name"]').should('have.value', '');
+      cy.get('input[name="weight"]').should('have.value', '');
+      cy.get('input[name="age"]').should('have.value', '');
+    });
+  
+    it('Should require a cat name', () => {
+      cy.contains('button', 'Add').click();
+      
+      cy.get('.card-title').should('not.exist');
+      
+      cy.get('input[name="name"]').type('Mittens');
+      cy.get('input[name="weight"]').type('20 lbs');
+      cy.get('input[name="age"]').type('5 years');
+      cy.get('select[name="breed"]').select('Maine Coon');
+      cy.contains('button', 'Add').click();
+      
+      cy.contains('.card-title', 'Mittens').should('be.visible');
+    });
+  
+    it('Should select a cat when clicked', () => {
+      cy.get('input[name="name"]').type('Felix');
+      cy.get('input[name="weight"]').type('15 lbs');
+      cy.get('input[name="age"]').type('1 years');
+      cy.get('select[name="breed"]').select('Maine Coon');
+      cy.contains('button', 'Add').click();
+      
+      cy.contains('.card-title', 'Felix').click();
+      
+      cy.contains('.card-title', 'Felix')
+        .parents('.card')
+        .should('have.class', 'selected-cat');
+      
+    });
+  });
 ```
 ### Add Cats Location E2E Test:
 ```typescript
