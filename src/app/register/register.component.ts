@@ -37,7 +37,9 @@ export class RegisterComponent {
 
     this.userService.register(user).subscribe({
       next: (response) => {
-        console.log('Registration successful', response);
+        localStorage.setItem('userId', response.user.id);
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
         alert('Registration Successful!');
         this.authService.setLoggedIn(true);
         this.router.navigate(['/cats']);

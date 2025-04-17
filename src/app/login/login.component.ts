@@ -22,6 +22,9 @@ export class LoginComponent {
     const creds = { email: this.email, password: this.password };
     this.userService.login(creds).subscribe({
       next: (response) => {
+        localStorage.setItem('userId', response.user.id);
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
         alert('Login Successful!');
         this.authService.setLoggedIn(true);
         this.router.navigate(['/cats']);

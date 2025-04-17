@@ -78,7 +78,12 @@ const catSchema = new mongoose.Schema({
   name: { type: String, required: true },
   weight: { type: mongoose.Schema.Types.Mixed },
   age: { type: mongoose.Schema.Types.Mixed },
-  breed: { type: String }
+  breed: { type: String },
+  userId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User',
+    required: true
+  },
 }, { timestamps: true });
 
 const Cat = mongoose.model('Cat', catSchema);
@@ -229,6 +234,15 @@ app.delete('/api/users/delete', async (req, res) => {
   }
 });
 
+app.get('/api/users/:userId/cats', async (req, res) => {
+  try {
+    const cats = await Cat.find({ userId: req.params.userId });
+    res.status(200).json(cats);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching user cats' });
+  }
+});
+
 // Cat API Routes
 
 // Get all cats
@@ -254,7 +268,10 @@ app.get('/api/cats/count', async (req, res) => {
 // Create new cat
 app.post('/api/cats', async (req, res) => {
   try {
-    const cat = new Cat(req.body);
+    const cat = new Cat({
+      ...req.body,
+      userId: req.body.userId
+    });
     const savedCat = await cat.save();
     res.status(201).json(savedCat);
   } catch (error) {

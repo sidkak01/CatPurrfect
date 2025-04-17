@@ -85,11 +85,18 @@ export class CatsComponent {
     this.isInteractingWithCatOrMap = true;
 
     if (this.newCat.name) {
+      const userId = localStorage.getItem('userId');
+    
+      if (!userId) {
+        console.error('No user ID found');
+        return;
+      }
+
       // Add cat to array (frontend only for now)
       this.cats.push({...this.newCat});
 
       // Also save to MongoDB
-      this.catService.addCat(this.newCat).subscribe({
+      this.catService.addCat(this.newCat, userId).subscribe({
         next: (savedCat) => {
           console.log('Cat saved to database:', savedCat);
         },

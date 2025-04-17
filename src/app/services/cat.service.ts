@@ -17,6 +17,10 @@ export class CatService {
   
   constructor(private http: HttpClient) {}
 
+  getUserCats(userId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/users/${userId}/cats`);
+  }
+
   getAllCats(): Observable<Cat[]> {
     return this.http.get<Cat[]>(`${this.apiUrl}/cats`);
   }
@@ -25,8 +29,9 @@ export class CatService {
     return this.http.get<Cat>(`${this.apiUrl}/cat/${id}`);
   }
 
-  addCat(cat: Cat): Observable<Cat> {
-    return this.http.post<Cat>(`${this.apiUrl}/cats`, cat);
+  addCat(cat: any, userId: string): Observable<any> {
+    const catWithUserId = { ...cat, userId };
+    return this.http.post<any>(`${this.apiUrl}/cats`, catWithUserId);
   }
 
   updateCat(id: string, cat: Partial<Cat>): Observable<Cat> {
