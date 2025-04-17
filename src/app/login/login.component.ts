@@ -19,13 +19,17 @@ export class LoginComponent {
   constructor(private userService: UserService, private router: Router, private authService: AuthService) {}
 
   onLogin() {
-    console.log('User Logged In:', {
-      username: this.username,
-      email: this.email,
-      password: this.password
+    const creds = { email: this.email, password: this.password };
+    this.userService.login(creds).subscribe({
+      next: (response) => {
+        alert('Login Successful!');
+        this.authService.setLoggedIn(true);
+        this.router.navigate(['/cats']);
+      },
+      error: (error) => {
+        console.error('Login failed', error);
+        alert('Login failed: ' + (error.error?.message || 'Please try again.'));
+      }
     });
-    alert('Login Successful!');
-    this.authService.setLoggedIn(true);
-    this.router.navigate(['/cats']);
   }
 }

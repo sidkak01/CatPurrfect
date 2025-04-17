@@ -26,7 +26,7 @@ export class CatService {
   }
 
   addCat(cat: Cat): Observable<Cat> {
-    return this.http.post<Cat>(`${this.apiUrl}/cat`, cat);
+    return this.http.post<Cat>(`${this.apiUrl}/cats`, cat);
   }
 
   updateCat(id: string, cat: Partial<Cat>): Observable<Cat> {
