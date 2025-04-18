@@ -84,6 +84,10 @@ const catSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  location: {
+    lat: { type: Number },
+    lng: { type: Number }
+  },
 }, { timestamps: true });
 
 const Cat = mongoose.model('Cat', catSchema);

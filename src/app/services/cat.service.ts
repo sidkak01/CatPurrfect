@@ -7,6 +7,11 @@ interface Cat {
   weight: string | number;
   age: string | number;
   breed: string;
+  location?: {
+    lat: number;
+    lng: number;
+  };
+  _id?: string;
 }
 
 @Injectable({

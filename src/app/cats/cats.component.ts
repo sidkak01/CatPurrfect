@@ -15,6 +15,7 @@ interface Cat {
     lat: number;
     lng: number;
   };
+  _id?: string;
 }
 
 @Component({
@@ -69,7 +70,31 @@ export class CatsComponent {
     
     this.authService.isLoggedIn().subscribe(status => {
       this.isLoggedIn = status;
+
+      if (status) {
+        this.loadUserCats();
+      }
     });
+  }
+
+  loadUserCats(): void {
+    const userId = localStorage.getItem('userId')
+    
+    if (userId) {
+      this.catService.getUserCats(userId).subscribe({
+        next: (response: any) => {
+          const catArray: Cat[] = Array.isArray(response) ? response : [];
+          this.cats = catArray;
+
+          if (this.map) {
+            this.updateAllMarkers();
+          }
+        },
+        error: (err) => {
+          console.error('Error loading user cats:', err);
+        }
+      });
+    }
   }
 
   onMapInitialized(map: google.maps.Map): void {
@@ -92,13 +117,21 @@ export class CatsComponent {
         return;
       }
 
-      // Add cat to array (frontend only for now)
-      this.cats.push({...this.newCat});
-
       // Also save to MongoDB
       this.catService.addCat(this.newCat, userId).subscribe({
         next: (savedCat) => {
           console.log('Cat saved to database:', savedCat);
+
+          const index = this.cats.findIndex(cat => 
+            cat.name === this.newCat.name &&
+            cat.breed === this.newCat.breed
+          );
+          
+          if (index !== -1) {
+            this.cats[index] = savedCat;
+          } else {
+            this.cats.push(savedCat);
+          }
         },
         error: (err) => {
           console.error('Error saving cat to database:', err);
@@ -150,6 +183,19 @@ export class CatsComponent {
       this.selectedCat = updatedCat;
       
       this.updateMarkerForCat(updatedCat);
+
+      if (updatedCat._id && typeof updatedCat._id === 'string') {
+        this.catService.updateCat(updatedCat._id, { location: position }).subscribe({
+          next: (savedCat) => {
+            console.log('Cat location updated in database:', savedCat);
+          },
+          error: (err) => {
+            console.error('Error updating cat location:', err);
+          }
+        });
+      } else {
+        console.error('Cannot update cat in database: Missing valid _id');
+      }
     }
   }
 
