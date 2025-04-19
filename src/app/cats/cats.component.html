@@ -20,7 +20,7 @@
       <div class="row">
         <div class="col-md-6">
           <div class="card p-3 shadow-sm" (click)="onFormInteraction($event)">
-            <h3 class="mb-3">Add New Cat</h3>
+            <h3 class="mb-3">{{ isEditing ? 'Edit Cat' : 'Add New Cat' }}</h3>
     
             <form (ngSubmit)="addCat()" #catForm="ngForm">
               <div class="row g-2">
@@ -86,7 +86,8 @@
     
                 <div class="col-12">
                   <button type="submit" class="btn btn-primary w-100">
-                    <i class="fas fa-plus"></i> Add
+                    <i class="fas" [ngClass]="isEditing ? 'fa-save' : 'fa-plus'"></i>
+                    {{ isEditing ? 'Save Changes' : 'Add' }}
                   </button>
                 </div>
               </div>
@@ -116,6 +117,14 @@
                 <div *ngIf="cat.location" class="location-badge">
                   <i class="fas fa-map-marker-alt"></i> Location Added
                 </div>
+              </div>
+              <div class="position-absolute top-0 end-0 p-2 cat-actions">
+                <button class="btn btn-sm btn-outline-primary me-1" (click)="editCat(cat, $event)">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteCat(cat, $event)">
+                  <i class="fas fa-trash"></i>
+                </button>
               </div>
             </div>
           </div>

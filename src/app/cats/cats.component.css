@@ -69,4 +69,16 @@
     right: 10px;
     bottom: 10px;
   }
+
+  .cat-actions {
+    opacity: 1;
+  }
+  
+  .selected-cat .cat-actions {
+    opacity: 1;
+  }
+  
+  .cat-actions button {
+    z-index: 10;
+  }
   

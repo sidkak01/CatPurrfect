@@ -8,8 +8,8 @@ import { GoogleMapsModule } from '@angular/google-maps';
 
 interface Cat {
   name: string;
-  weight: string;
-  age: string;
+  weight: string | number;
+  age: string | number;
   breed: string;
   location?: {
     lat: number;
@@ -34,6 +34,7 @@ export class CatsComponent {
   };
 
   isLoggedIn = false;
+  isEditing = false;
   
   cats: Cat[] = [];
 
@@ -106,6 +107,48 @@ export class CatsComponent {
     });
   }
 
+  editCat(cat: Cat, event: MouseEvent): void {
+    // Prevent the selectCat method from being triggered
+    event.stopPropagation();
+    
+    this.isInteractingWithCatOrMap = true;
+    this.isEditing = true;
+    this.newCat = { ...cat }; // Copy the cat to the form
+  }
+  
+  deleteCat(cat: Cat, event: MouseEvent): void {
+    // Prevent the selectCat method from being triggered
+    event.stopPropagation();
+    this.isInteractingWithCatOrMap = true;
+    
+    if (confirm(`Are you sure you want to delete ${cat.name}?`)) {
+      if (cat._id) {
+        this.catService.deleteCat(cat._id).subscribe({
+          next: () => {
+            this.cats = this.cats.filter(c => c !== cat);
+
+            if (this.selectedCat === cat) {
+              this.selectedCat = null;
+            }
+            
+            this.updateAllMarkers();
+          },
+          error: (err) => {
+            console.error('Error deleting cat:', err);
+          }
+        });
+      } else {
+        this.cats = this.cats.filter(c => c !== cat);
+        
+        if (this.selectedCat === cat) {
+          this.selectedCat = null;
+        }
+        
+        this.updateAllMarkers();
+      }
+    }
+  }
+
   addCat(): void {
     this.isInteractingWithCatOrMap = true;
 
@@ -117,33 +160,59 @@ export class CatsComponent {
         return;
       }
 
-      // Also save to MongoDB
-      this.catService.addCat(this.newCat, userId).subscribe({
-        next: (savedCat) => {
-          console.log('Cat saved to database:', savedCat);
-
-          const index = this.cats.findIndex(cat => 
-            cat.name === this.newCat.name &&
-            cat.breed === this.newCat.breed
-          );
-          
-          if (index !== -1) {
-            this.cats[index] = savedCat;
-          } else {
-            this.cats.push(savedCat);
+      if (this.newCat._id) {
+        // Update existing cat if an ID is detected
+        this.catService.updateCat(this.newCat._id, this.newCat).subscribe({
+          next: (updatedCat) => {
+            const index = this.cats.findIndex(cat => cat._id === this.newCat._id);
+            if (index !== -1) {
+              this.cats[index] = updatedCat;
+            }
+            
+            this.updateAllMarkers();
+            
+            this.newCat = {
+              name: '',
+              weight: '',
+              age: '',
+              breed: ''
+            };
+            this.isEditing = false;
+          },
+          error: (err) => {
+            console.error('Error updating cat:', err);
           }
-        },
-        error: (err) => {
-          console.error('Error saving cat to database:', err);
-        }
-      });
-      
-      this.newCat = {
-        name: '',
-        weight: '',
-        age: '',
-        breed: ''
-      };
+        });
+      }
+
+      else {
+      // Form function as regular add cat
+        this.catService.addCat(this.newCat, userId).subscribe({
+          next: (savedCat) => {      
+            const index = this.cats.findIndex(cat => 
+              cat.name === this.newCat.name &&
+              cat.breed === this.newCat.breed
+            );
+            
+            if (index !== -1) {
+              this.cats[index] = savedCat;
+            } else {
+              this.cats.push(savedCat);
+            }
+          },
+          error: (err) => {
+            console.error('Error saving cat to database:', err);
+          }
+        });
+        
+        this.newCat = {
+          name: '',
+          weight: '',
+          age: '',
+          breed: ''
+        };
+
+      }
     }
   }
 
