@@ -9,7 +9,12 @@
     ]
   },
   "include": [
+    "src/test.ts",
     "src/**/*.spec.ts",
     "src/**/*.d.ts"
+  ],
+  "exclude": [
+    "./cypress/**/*.ts",
+    "./cypress/cypress.config.ts"
   ]
 }
