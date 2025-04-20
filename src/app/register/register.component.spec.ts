@@ -6,6 +6,7 @@ import { RegisterComponent } from './register.component';
 import { UserService } from '../services/user.service';
 import { AuthService } from '../services/auth.service';
 import { of, throwError } from 'rxjs';
+import { By } from '@angular/platform-browser';
 
 class MockUserService { // Mock the register functionality in the UserService with a spy
   register = jasmine.createSpy('register').and.returnValue(of({
@@ -127,5 +128,13 @@ describe('RegisterComponent', () => {
   
     expect(window.alert).toHaveBeenCalledWith('Registration failed: User already exists');
   });
+
+  // Making sure the link is present versus setting up full navigation routing - similar to login component test
+    it('Should have the "/register" link on the "Register" button', () => {
+      // Find the element on the page that routes to the login page
+      const link = fixture.debugElement.query(By.css('a[routerLink="/login"]'));
+      expect(link).toBeTruthy();
+      expect(link.attributes['routerLink']).toBe('/login');  // Ensure the navigation link to be present
+    });
   
 });
