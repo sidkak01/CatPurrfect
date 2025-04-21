@@ -115,4 +115,11 @@ describe('NavbarComponent', () => {
     expect(link).toBeTruthy();
     expect(link.attributes['routerLink']).toBe('/');
   });
+
+  it('Should display "Login" link when logged out', () => {
+    authService.setLoggedIn(false);
+    fixture.detectChanges();
+    const loginLink = fixture.debugElement.query(By.css('a[routerLink="/login"]'));
+    expect(loginLink).toBeTruthy();
+  });
 });
