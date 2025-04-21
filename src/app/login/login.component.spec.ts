@@ -52,7 +52,7 @@ describe('LoginComponent', () => {
     component = fixture.componentInstance;
     router = TestBed.inject(Router);
     location = TestBed.inject(Location);
-    spyOn(router, 'navigate');  // Creating a spy for routing on login attempts
+    spyOn(router, 'navigate');
     fixture.detectChanges();
   });
 
@@ -60,7 +60,6 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // Basic successful login attempt
   it('Should call login and navigate on successful login', () => {
     spyOn(window, 'alert');
 
@@ -69,29 +68,26 @@ describe('LoginComponent', () => {
 
     component.onLogin();
 
-    expect(component['userService'].login).toHaveBeenCalledWith({   // Mock the successfull login attempt
+    expect(component['userService'].login).toHaveBeenCalledWith({
       email: 'test@example.com',
       password: 'password123'
     });
 
     expect(window.alert).toHaveBeenCalledWith('Login Successful!');
     expect(component['authService'].setLoggedIn).toHaveBeenCalledWith(true);
-    expect(router.navigate).toHaveBeenCalledWith(['/cats']);    // Navigate to cats page with loggedIn flag set
-
-    // Check localStorage items
+    expect(router.navigate).toHaveBeenCalledWith(['/cats']);
     expect(localStorage.getItem('userId')).toBe('123');
     expect(localStorage.getItem('token')).toBe('fake-token');
     expect(localStorage.getItem('user')).toContain('Test User');
   });
 
-  // Logging in with credentials not yet registered
   it('Should show alert on failed login', () => {
     spyOn(window, 'alert');
 
     const userService = TestBed.inject(UserService) as jasmine.SpyObj<UserService>;
     userService.login.and.returnValue(
       throwError(() => ({
-        error: { message: 'Invalid email or password' }   // Mock the expected error when invalid credentials are used
+        error: { message: 'Invalid email or password' }
       }))
     );
 
@@ -100,37 +96,53 @@ describe('LoginComponent', () => {
 
     component.onLogin();
 
-    expect(window.alert).toHaveBeenCalledWith('Login failed: Invalid email or password');   // The on-screen window that is shown to the user
+    expect(window.alert).toHaveBeenCalledWith('Login failed: Invalid email or password');
     expect(component['authService'].setLoggedIn).not.toHaveBeenCalled();
     expect(router.navigate).not.toHaveBeenCalled();
   });
 
-  // Making sure the link is present versus setting up full navigation routing
   it('Should have the "/register" link on the "Register" button', () => {
-    const link = fixture.debugElement.query(By.css('a[routerLink="/register"]')); // Find the element on the page that routes to the register page
+    const link = fixture.debugElement.query(By.css('a[routerLink="/register"]'));
     expect(link).toBeTruthy();
-    expect(link.attributes['routerLink']).toBe('/register');  // Ensure the navigation link to be present
+    expect(link.attributes['routerLink']).toBe('/register');
   });
 
-  // Attempting a login with the password field empty
   it('Should show alert if user tries logging in with password field empty', () => {
     spyOn(window, 'alert');
-  
+
     const userService = TestBed.inject(UserService) as jasmine.SpyObj<UserService>;
-  
-    // Simulate backend returning a 401 error
+
     userService.login.and.returnValue(
       throwError(() => ({
         error: { message: 'Invalid email or password' }
       }))
     );
-  
+
     component.email = 'test@example.com';
     component.password = '';
-  
+
     component.onLogin();
-  
-    expect(window.alert).toHaveBeenCalledWith('Login failed: Invalid email or password');   // Frontend feedback to the user
+
+    expect(window.alert).toHaveBeenCalledWith('Login failed: Invalid email or password');
   });
 
+  it('Should initialize email and password as empty strings', () => {
+    expect(component.email).toBe('');
+    expect(component.password).toBe('');
+  });
+
+  it('Should contain a login form in the template', () => {
+    const form = fixture.debugElement.query(By.css('form'));
+    expect(form).toBeTruthy();
+  });
+
+  it('Should have an email input field', () => {
+    const emailInput = fixture.debugElement.query(By.css('input[type="email"]'));
+    expect(emailInput).toBeTruthy();
+  });
+
+  it('Should have a password input field', () => {
+    const passwordInput = fixture.debugElement.query(By.css('input[type="password"]'));
+    expect(passwordInput).toBeTruthy();
+  });
 });
