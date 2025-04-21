@@ -62,17 +62,13 @@ describe('LoginComponent', () => {
 
   it('Should call login and navigate on successful login', () => {
     spyOn(window, 'alert');
-
     component.email = 'test@example.com';
     component.password = 'password123';
-
     component.onLogin();
-
     expect(component['userService'].login).toHaveBeenCalledWith({
       email: 'test@example.com',
       password: 'password123'
     });
-
     expect(window.alert).toHaveBeenCalledWith('Login Successful!');
     expect(component['authService'].setLoggedIn).toHaveBeenCalledWith(true);
     expect(router.navigate).toHaveBeenCalledWith(['/cats']);
@@ -83,19 +79,15 @@ describe('LoginComponent', () => {
 
   it('Should show alert on failed login', () => {
     spyOn(window, 'alert');
-
     const userService = TestBed.inject(UserService) as jasmine.SpyObj<UserService>;
     userService.login.and.returnValue(
       throwError(() => ({
         error: { message: 'Invalid email or password' }
       }))
     );
-
     component.email = 'wrong@example.com';
     component.password = 'wrongpassword';
-
     component.onLogin();
-
     expect(window.alert).toHaveBeenCalledWith('Login failed: Invalid email or password');
     expect(component['authService'].setLoggedIn).not.toHaveBeenCalled();
     expect(router.navigate).not.toHaveBeenCalled();
@@ -109,20 +101,15 @@ describe('LoginComponent', () => {
 
   it('Should show alert if user tries logging in with password field empty', () => {
     spyOn(window, 'alert');
-
     const userService = TestBed.inject(UserService) as jasmine.SpyObj<UserService>;
-
     userService.login.and.returnValue(
       throwError(() => ({
         error: { message: 'Invalid email or password' }
       }))
     );
-
     component.email = 'test@example.com';
     component.password = '';
-
     component.onLogin();
-
     expect(window.alert).toHaveBeenCalledWith('Login failed: Invalid email or password');
   });
 
@@ -144,5 +131,10 @@ describe('LoginComponent', () => {
   it('Should have a password input field', () => {
     const passwordInput = fixture.debugElement.query(By.css('input[type="password"]'));
     expect(passwordInput).toBeTruthy();
+  });
+
+  it('Should have a login button with text "Login"', () => {
+    const button = fixture.debugElement.query(By.css('button[type="submit"]')).nativeElement;
+    expect(button.textContent).toContain('Login');
   });
 });
