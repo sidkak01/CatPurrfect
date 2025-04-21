@@ -162,4 +162,9 @@ describe('RegisterComponent', () => {
   it('Should match snapshot of component HTML', () => {
     expect(fixture.nativeElement.innerHTML).toMatchSnapshot();
   });
+
+  it('Should have a register button with text "Register"', () => {
+    const button = fixture.debugElement.query(By.css('button[type="submit"]')).nativeElement;
+    expect(button.textContent).toContain('Register');
+  });
 });
