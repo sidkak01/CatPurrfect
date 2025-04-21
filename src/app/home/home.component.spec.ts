@@ -53,6 +53,11 @@ describe('HomeComponent', () => {
     expect(imgs.length).toBe(1);
   });
 
+  it('Should render exactly one paragraph', () => {
+    const paragraphs = fixture.debugElement.queryAll(By.css('p'));
+    expect(paragraphs.length).toBe(1);
+  });
+
   it('Should match snapshot of component HTML', () => {
     expect(fixture.nativeElement.innerHTML).toMatchSnapshot();
   });
