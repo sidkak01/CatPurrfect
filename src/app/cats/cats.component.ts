@@ -78,6 +78,38 @@ export class CatsComponent {
     });
   }
 
+  refreshLocations(): void {    // Simulating tracking the live location of cats
+    if (!this.map) return;
+  
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      console.error('User ID not found');
+      return;
+    }
+  
+    this.cats.forEach((cat, index) => {
+      // Simulate movement within the general region on the map
+      const latOffset = (Math.random() - 0.5) * 0.02;
+      const lngOffset = (Math.random() - 0.5) * 0.02;
+  
+      const newLocation = {
+        lat: this.center.lat + latOffset,
+        lng: this.center.lng + lngOffset,
+      };
+  
+      this.cats[index] = { ...cat, location: newLocation };
+  
+      // Update marker on map immediately
+      this.updateMarkerForCat(this.cats[index]);
+  
+      if (cat._id) {  // Update location in db for persistence
+        this.catService.updateCat(cat._id, { location: newLocation }).subscribe({
+          error: (err) => console.error('Error updating cat location:', err),
+        });
+      }
+    });
+  }
+  
   loadUserCats(): void {
     const userId = localStorage.getItem('userId')
     

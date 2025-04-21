@@ -81,4 +81,15 @@
   .cat-actions button {
     z-index: 10;
   }
+
+  .refresh-btn {
+    border: 1px solid #E67E22;
+    color: #E67E22;
+    background-color: transparent;
+  }
+  
+  .refresh-btn:hover {
+    background-color: #E67E22;
+    color: white;
+  }
   

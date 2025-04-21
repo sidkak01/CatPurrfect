@@ -6,6 +6,7 @@ import { CatsComponent } from './cats.component';
 import { AuthService } from '../services/auth.service';
 import { CatService } from '../services/cat.service';
 import { of, BehaviorSubject } from 'rxjs';
+import { By } from '@angular/platform-browser';
 
 class MockAuthService {
   private loggedIn = new BehaviorSubject<boolean>(true);
@@ -236,5 +237,37 @@ describe('CatsComponent', () => {
     component.editCat(cat, mockEvent);
 
     expect(component.newCat).toEqual(cat);
+  });
+
+  it('Should update location of each cat on refresh', () => {
+    const catService = TestBed.inject(CatService);
+    spyOn(catService, 'updateCat').and.callThrough();
+  
+    localStorage.setItem('userId', 'user123');
+    component.center = { lat: 29.65163, lng: -82.32483 }; // refreshLocations requires the general region of the map to be set
+  
+    component.cats = [
+      { name: 'Whiskers', weight: '10 lbs', age: '2 years', breed: 'Siamese', _id: 'cat1' },
+      { name: 'Poppers', weight: '20 lbs', age: '4 years', breed: 'Maine Coon', _id: 'cat2' }
+    ];
+  
+    component.refreshLocations();
+  
+    expect(catService.updateCat).toHaveBeenCalledTimes(2);
+    expect(catService.updateCat).toHaveBeenCalledWith('cat1', jasmine.objectContaining({ location: jasmine.any(Object) }));
+    expect(catService.updateCat).toHaveBeenCalledWith('cat2', jasmine.objectContaining({ location: jasmine.any(Object) }));
+  });
+
+  it('Should load the "Refresh Locations" button when user is logged in', () => {
+    const authService = TestBed.inject(AuthService) as unknown as MockAuthService;
+    authService.setLoggedIn(true);
+  
+    fixture.detectChanges();
+  
+    const button = fixture.debugElement.query(
+      By.css('button[aria-label="Refresh Cat Locations"]')
+    );
+  
+    expect(button).toBeTruthy();
   });
 });
