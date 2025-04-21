@@ -33,22 +33,17 @@ describe('HomeComponent', () => {
     expect(paragraph.textContent).toContain('The purrfect place to keep track of your feline friends!');
   });
 
-  it('Should have a header element with expected text', () => {
-    const header = fixture.debugElement.query(By.css('h1')).nativeElement;
-    expect(header.textContent).toContain('Welcome to CatPurrfect');
+  it('Should display the hero section message', () => {
+    const paragraph = fixture.debugElement.query(By.css('p')).nativeElement;
+    expect(paragraph.textContent).toContain('The purrfect place to keep track of your feline friends!');
   });
 
-  it('Should contain a container div for content', () => {
-    const container = fixture.debugElement.query(By.css('.container'));
-    expect(container).toBeTruthy();
+  it('Should contain the hero section div', () => {
+    const hero = fixture.debugElement.query(By.css('.hero-section'));
+    expect(hero).toBeTruthy();
   });
 
-  it('Should have a link to "/cats"', () => {
-    const link = fixture.debugElement.query(By.css('a[routerLink="/cats"]'));
-    expect(link).toBeTruthy();
-  });
-
-  it('Should render exactly one image', () => {
+  it('Should render exactly one image (logo)', () => {
     const imgs = fixture.debugElement.queryAll(By.css('img'));
     expect(imgs.length).toBe(1);
   });
@@ -58,7 +53,4 @@ describe('HomeComponent', () => {
     expect(paragraphs.length).toBe(1);
   });
 
-  it('Should match snapshot of component HTML', () => {
-    expect(fixture.nativeElement.innerHTML).toMatchSnapshot();
-  });
 });

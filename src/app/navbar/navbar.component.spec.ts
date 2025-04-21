@@ -60,18 +60,18 @@ describe('NavbarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('Should have a "Cats" button that links to /cats', () => {
+  it('Should have a "Cats" button that links to /cats', () => {   // Ensure the cats button links to the cats page
     const link = fixture.debugElement.query(By.css('a[routerLink="/cats"]'));
     expect(link).toBeTruthy();
     expect(link.attributes['routerLink']).toBe('/cats');
   });
 
   it('Should update isLoggedIn when authService changes its value', () => {
-    authService.setLoggedIn(false);
+    authService.setLoggedIn(false); // Logged out state
     fixture.detectChanges();
     expect(component.isLoggedIn).toBeFalse();
 
-    authService.setLoggedIn(true);
+    authService.setLoggedIn(true);  // Mock user logging in successfully
     fixture.detectChanges();
     expect(component.isLoggedIn).toBeTrue();
   });
@@ -85,26 +85,32 @@ describe('NavbarComponent', () => {
     expect(localStorage.removeItem).toHaveBeenCalledWith('token');
     expect(localStorage.removeItem).toHaveBeenCalledWith('user');
     expect(authService.setLoggedIn).toHaveBeenCalledWith(false);
-    expect(router.navigate).toHaveBeenCalledWith(['/']);
+    expect(router.navigate).toHaveBeenCalledWith(['/']);  // Logging out workflow removes localStorage items and ends with navigating to home
   });
 
-  it('Should contain a navbar element', () => {
+  it('Should contain a navbar element', () => { // Ensure navbar remains on the screen
     const navbar = fixture.debugElement.query(By.css('nav'));
     expect(navbar).toBeTruthy();
   });
 
-  it('Should display "Logout" button only when logged in', () => {
+  it('Should display "Logout" link only when logged in', () => {  // Conditional check based on login status
     authService.setLoggedIn(true);
     fixture.detectChanges();
-    const logoutButton = fixture.debugElement.query(By.css('button.logout'));
-    expect(logoutButton).toBeTruthy();
+  
+    const logoutLink = fixture.debugElement.queryAll(By.css('a.nav-link'))
+      .find(el => el.nativeElement.textContent.includes('Logout')); // Not using an actual button, but an <a> element
+  
+    expect(logoutLink).toBeTruthy();
   });
 
-  it('Should not display "Logout" button when logged out', () => {
+  it('Should not display "Logout" link when logged out', () => {
     authService.setLoggedIn(false);
     fixture.detectChanges();
-    const logoutButton = fixture.debugElement.query(By.css('button.logout'));
-    expect(logoutButton).toBeNull();
+  
+    const logoutLink = fixture.debugElement.queryAll(By.css('a.nav-link'))
+      .find(el => el.nativeElement.textContent.includes('Logout'));
+  
+    expect(logoutLink).toBeUndefined();
   });
 
   it('Should have a home button that links to /', () => {
@@ -127,10 +133,14 @@ describe('NavbarComponent', () => {
     expect(loginLink).toBeNull();
   });
 
-  it('Should have a logout button with text "Logout" when logged in', () => {
+  it('Should have a logout link with text "Logout" when logged in', () => { // Checking the actual frontend text
     authService.setLoggedIn(true);
     fixture.detectChanges();
-    const button = fixture.debugElement.query(By.css('button.logout')).nativeElement;
-    expect(button.textContent).toContain('Logout');
+  
+    const logoutLink = fixture.debugElement.queryAll(By.css('a.nav-link'))
+      .find(el => el.nativeElement.textContent.includes('Logout'));
+  
+    expect(logoutLink).toBeTruthy();
+    expect(logoutLink!.nativeElement.textContent).toContain('Logout');
   });
 });

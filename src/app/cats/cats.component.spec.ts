@@ -39,6 +39,10 @@ class MockCatService {
   deleteCat(id: string) {
     return of({});
   }
+
+  editCat(id: string, cat: any) {
+    return of({});
+  }
 }
 
 class MockActivatedRoute {
@@ -50,7 +54,7 @@ class MockActivatedRoute {
 }
 
 beforeAll(() => {
-  (globalThis as any).google = {
+  (globalThis as any).google = {  // Mocking the Google Maps component
     maps: {
       Map: class {
         addListener() {}
@@ -108,14 +112,14 @@ describe('CatsComponent', () => {
     spyOn(catService, 'getUserCats').and.returnValue(of(mockCats));
     localStorage.setItem('userId', '123');
 
-    component.ngOnInit();
+    component.ngOnInit(); // It is setup so when the component first loads, the cats API is called to load the current cats from the db
 
     expect(catService.getUserCats).toHaveBeenCalledWith('123');
     expect(component.cats.length).toBe(1);
     expect(component.cats[0].name).toBe('Whiskers');
   });
 
-  it('Should add a new cat', () => {
+  it('Should add a new cat', () => {  // Basic adding a cat
     const catService = TestBed.inject(CatService);
     spyOn(catService, 'addCat').and.callThrough();
     localStorage.setItem('userId', '123');
@@ -141,19 +145,22 @@ describe('CatsComponent', () => {
       weight: '7',
       age: '4',
       breed: 'Persian',
-      _id: 'cat123'
+      _id: 'cat123' // Existing cats are linked in the db with the user's _id
     };
+
+    localStorage.setItem('userId', 'user123');  // UserId is required for editing the cats dashboard
 
     component.cats = [existingCat];
     component.newCat = { ...existingCat, name: 'Tommy' };
 
     component.addCat();
 
-    expect(catService.updateCat).toHaveBeenCalledWith('cat123', jasmine.any(Object));
+    expect(catService.updateCat).toHaveBeenCalledWith('cat123', jasmine.any(Object)); // Make sure it is properly updated in db by using the _id
   });
 
   it('Should delete a cat after confirmation', () => {
-    spyOn(window, 'confirm').and.returnValue(true);
+    spyOn(window, 'confirm').and.returnValue(true); // Confirmation is required to delete the cat
+    
     const catService = TestBed.inject(CatService);
     spyOn(catService, 'deleteCat').and.callThrough();
 
@@ -166,11 +173,11 @@ describe('CatsComponent', () => {
   });
 
   it('Should detect user is logged in on init', () => {
-    const authService = TestBed.inject(AuthService) as MockAuthService;
+    const authService = TestBed.inject(AuthService) as unknown as MockAuthService;
     expect(authService.getLoggedInValue()).toBeTrue();
   });
 
-  it('Should reset newCat after adding a cat', () => {
+  it('Should reset newCat after adding a cat', () => {  // The local newCat item should be reset after an add/edit
     const catService = TestBed.inject(CatService);
     spyOn(catService, 'addCat').and.callThrough();
     localStorage.setItem('userId', '123');
@@ -179,7 +186,7 @@ describe('CatsComponent', () => {
       name: 'Simba',
       weight: '8',
       age: '5',
-      breed: 'Maine Coon'
+      breed: 'Persian'
     };
 
     component.addCat();
@@ -187,7 +194,7 @@ describe('CatsComponent', () => {
     expect(component.newCat).toEqual({ name: '', weight: '', age: '', breed: '' });
   });
 
-  it('Should not delete cat if confirmation is canceled', () => {
+  it('Should not delete cat if confirmation is canceled', () => { // Ensure that deleting is a two-step confirmation process
     spyOn(window, 'confirm').and.returnValue(false);
     const catService = TestBed.inject(CatService);
     spyOn(catService, 'deleteCat');
@@ -221,8 +228,13 @@ describe('CatsComponent', () => {
 
   it('Should load selected cat into newCat when editCat is called', () => {
     const cat = { name: 'Kitty', weight: '4', age: '1', breed: 'Domestic', _id: 'xyz' };
+
+    const mockEvent = new MouseEvent('click');
+    spyOn(mockEvent, 'stopPropagation');
+
     component.cats = [cat];
-    component.editCat(cat);
+    component.editCat(cat, mockEvent);
+
     expect(component.newCat).toEqual(cat);
   });
 });
