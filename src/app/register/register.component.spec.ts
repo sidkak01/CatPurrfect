@@ -8,14 +8,14 @@ import { AuthService } from '../services/auth.service';
 import { of, throwError } from 'rxjs';
 import { By } from '@angular/platform-browser';
 
-class MockUserService { // Mock the register functionality in the UserService with a spy
+class MockUserService {
   register = jasmine.createSpy('register').and.returnValue(of({
     user: { id: '456', name: 'New User' },
     token: 'fake-token'
   }));
 }
 
-class MockAuthService { // Mocking the setLoggedIn state to manipulate as the page is conditional based on this value
+class MockAuthService {
   setLoggedIn = jasmine.createSpy('setLoggedIn');
 }
 
@@ -34,7 +34,7 @@ describe('RegisterComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule,  // Not used but include for all unit testing components
+        HttpClientTestingModule,
         RouterTestingModule,
         RegisterComponent
       ],
@@ -58,9 +58,9 @@ describe('RegisterComponent', () => {
     spyOn(window, 'alert');
     component.password = '12345';
     component.confirmPassword = '1234567';
-  
+
     component.onRegister();
-  
+
     expect(window.alert).toHaveBeenCalledWith('Passwords do not match');
     expect(component['userService'].register).not.toHaveBeenCalled();
   });
@@ -72,9 +72,9 @@ describe('RegisterComponent', () => {
     component.email = 'sprinttest@example.com';
     component.password = 'pass123';
     component.confirmPassword = 'pass123';
-  
+
     component.resetForm();
-  
+
     expect(component.firstName).toBe('');
     expect(component.lastName).toBe('');
     expect(component.username).toBe('');
@@ -85,16 +85,16 @@ describe('RegisterComponent', () => {
 
   it('Should call register and navigate on successful registration', () => {
     spyOn(window, 'alert');
-  
+
     component.firstName = 'Test';
     component.lastName = 'User';
     component.username = 'test1';
     component.email = 'test1@example.com';
     component.password = '123456';
     component.confirmPassword = '123456';
-  
+
     component.onRegister();
-  
+
     expect(component['userService'].register).toHaveBeenCalledWith({
       firstName: 'Test',
       lastName: 'User',
@@ -102,39 +102,65 @@ describe('RegisterComponent', () => {
       email: 'test1@example.com',
       password: '123456'
     });
-  
-    expect(component['authService'].setLoggedIn).toHaveBeenCalledWith(true);  // Upon registration mock the AuthService being called
+
+    expect(component['authService'].setLoggedIn).toHaveBeenCalledWith(true);
     expect(window.alert).toHaveBeenCalledWith('Registration Successful!');
   });
-  
+
   it('Should show alert on registration failure (user already exists)', () => {
     spyOn(window, 'alert');
-  
+
     const userService = TestBed.inject(UserService) as jasmine.SpyObj<UserService>;
     userService.register.and.returnValue(
       throwError(() => ({
         error: { message: 'User already exists' }
       }))
     );
-  
+
     component.firstName = 'Test';
     component.lastName = 'User';
     component.username = 'test1';
     component.email = 'test1@example.com';
     component.password = '123456';
     component.confirmPassword = '123456';
-  
+
     component.onRegister();
-  
+
     expect(window.alert).toHaveBeenCalledWith('Registration failed: User already exists');
   });
 
-  // Making sure the link is present versus setting up full navigation routing - similar to login component test
-    it('Should have the "/register" link on the "Register" button', () => {
-      // Find the element on the page that routes to the login page
-      const link = fixture.debugElement.query(By.css('a[routerLink="/login"]'));
-      expect(link).toBeTruthy();
-      expect(link.attributes['routerLink']).toBe('/login');  // Ensure the navigation link to be present
+  it('Should have the "/login" link on the "Register" button', () => {
+    const link = fixture.debugElement.query(By.css('a[routerLink="/login"]'));
+    expect(link).toBeTruthy();
+    expect(link.attributes['routerLink']).toBe('/login');
+  });
+
+  it('Should initialize all form fields as empty strings', () => {
+    expect(component.firstName).toBe('');
+    expect(component.lastName).toBe('');
+    expect(component.username).toBe('');
+    expect(component.email).toBe('');
+    expect(component.password).toBe('');
+    expect(component.confirmPassword).toBe('');
+  });
+
+  it('Should contain a form element in the template', () => {
+    const form = fixture.debugElement.query(By.css('form'));
+    expect(form).toBeTruthy();
+  });
+
+  it('Should contain input fields for first name, last name, username, email, password and confirmPassword', () => {
+    const inputs = [
+      'input[name="firstName"]',
+      'input[name="lastName"]',
+      'input[name="username"]',
+      'input[name="email"]',
+      'input[name="password"]',
+      'input[name="confirmPassword"]'
+    ];
+    inputs.forEach(selector => {
+      const input = fixture.debugElement.query(By.css(selector));
+      expect(input).toBeTruthy();
     });
-  
+  });
 });
