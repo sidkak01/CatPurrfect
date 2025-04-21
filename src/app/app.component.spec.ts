@@ -49,4 +49,9 @@ describe('AppComponent', () => {
     const navbar = fixture.debugElement.query(By.css('app-navbar'));
     expect(navbar).toBeTruthy();
   });
+
+  it('should use app-root as host element', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    expect(fixture.nativeElement.tagName).toBe('APP-ROOT');
+  });
 });
