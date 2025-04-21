@@ -4,7 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 import { NavbarComponent } from './navbar.component';
 import { AuthService } from '../services/auth.service';
-import { of, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { By } from '@angular/platform-browser';
 
@@ -63,18 +63,18 @@ describe('NavbarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('Should have a "Cats" button that links to /cats', () => {   // Ensure the cats button links to the cats page
+  it('Should have a "Cats" button that links to /cats', () => {
     const link = fixture.debugElement.query(By.css('a[routerLink="/cats"]'));
     expect(link).toBeTruthy();
     expect(link.attributes['routerLink']).toBe('/cats');
   });
 
   it('Should update isLoggedIn when authService changes its value', () => {
-    authService.setLoggedIn(false); // Logged out state
+    authService.setLoggedIn(false);
     fixture.detectChanges();
     expect(component.isLoggedIn).toBeFalse();
 
-    authService.setLoggedIn(true);  // Mock user logging in successfully
+    authService.setLoggedIn(true);
     fixture.detectChanges();
     expect(component.isLoggedIn).toBeTrue();
   });
@@ -88,6 +88,31 @@ describe('NavbarComponent', () => {
     expect(localStorage.removeItem).toHaveBeenCalledWith('token');
     expect(localStorage.removeItem).toHaveBeenCalledWith('user');
     expect(authService.setLoggedIn).toHaveBeenCalledWith(false);
-    expect(router.navigate).toHaveBeenCalledWith(['/']);  // Logging out workflow removes localStorage items and ends with navigating to home
+    expect(router.navigate).toHaveBeenCalledWith(['/']);
+  });
+
+  it('Should contain a navbar element', () => {
+    const navbar = fixture.debugElement.query(By.css('nav'));
+    expect(navbar).toBeTruthy();
+  });
+
+  it('Should display "Logout" button only when logged in', () => {
+    authService.setLoggedIn(true);
+    fixture.detectChanges();
+    const logoutButton = fixture.debugElement.query(By.css('button.logout'));
+    expect(logoutButton).toBeTruthy();
+  });
+
+  it('Should not display "Logout" button when logged out', () => {
+    authService.setLoggedIn(false);
+    fixture.detectChanges();
+    const logoutButton = fixture.debugElement.query(By.css('button.logout'));
+    expect(logoutButton).toBeNull();
+  });
+
+  it('Should have a home button that links to /', () => {
+    const link = fixture.debugElement.query(By.css('a[routerLink="/"]'));
+    expect(link).toBeTruthy();
+    expect(link.attributes['routerLink']).toBe('/');
   });
 });
