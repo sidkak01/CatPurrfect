@@ -99,6 +99,11 @@ describe('LoginComponent', () => {
     expect(link.attributes['routerLink']).toBe('/register');
   });
 
+  it('Should display "Register" link text', () => {
+    const link = fixture.debugElement.query(By.css('a[routerLink="/register"]')).nativeElement;
+    expect(link.textContent).toContain('Register');
+  });
+
   it('Should show alert if user tries logging in with password field empty', () => {
     spyOn(window, 'alert');
     const userService = TestBed.inject(UserService) as jasmine.SpyObj<UserService>;
