@@ -122,4 +122,11 @@ describe('NavbarComponent', () => {
     const loginLink = fixture.debugElement.query(By.css('a[routerLink="/login"]'));
     expect(loginLink).toBeTruthy();
   });
+
+  it('Should not display "Login" link when logged in', () => {
+    authService.setLoggedIn(true);
+    fixture.detectChanges();
+    const loginLink = fixture.debugElement.query(By.css('a[routerLink="/login"]'));
+    expect(loginLink).toBeNull();
+  });
 });
