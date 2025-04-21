@@ -48,6 +48,11 @@ describe('HomeComponent', () => {
     expect(link).toBeTruthy();
   });
 
+  it('Should render exactly one image', () => {
+    const imgs = fixture.debugElement.queryAll(By.css('img'));
+    expect(imgs.length).toBe(1);
+  });
+
   it('Should match snapshot of component HTML', () => {
     expect(fixture.nativeElement.innerHTML).toMatchSnapshot();
   });
