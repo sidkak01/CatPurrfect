@@ -137,4 +137,11 @@ describe('LoginComponent', () => {
     const button = fixture.debugElement.query(By.css('button[type="submit"]')).nativeElement;
     expect(button.textContent).toContain('Login');
   });
+
+  it('Should call onLogin when login button is clicked', () => {
+    spyOn(component, 'onLogin');
+    const button = fixture.debugElement.query(By.css('button[type="submit"]'));
+    button.triggerEventHandler('click', null);
+    expect(component.onLogin).toHaveBeenCalled();
+  });
 });
