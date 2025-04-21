@@ -43,6 +43,11 @@ describe('HomeComponent', () => {
     expect(container).toBeTruthy();
   });
 
+  it('Should have a link to "/cats"', () => {
+    const link = fixture.debugElement.query(By.css('a[routerLink="/cats"]'));
+    expect(link).toBeTruthy();
+  });
+
   it('Should match snapshot of component HTML', () => {
     expect(fixture.nativeElement.innerHTML).toMatchSnapshot();
   });
