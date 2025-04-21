@@ -10,15 +10,12 @@ import { By } from '@angular/platform-browser';
 
 class MockAuthService {
   private loggedIn = new BehaviorSubject<boolean>(true);
-
   isLoggedIn() {
     return this.loggedIn.asObservable();
   }
-
   getLoggedInValue() {
     return this.loggedIn.getValue();
   }
-
   setLoggedIn(value: boolean) {
     this.loggedIn.next(value);
   }
@@ -128,5 +125,12 @@ describe('NavbarComponent', () => {
     fixture.detectChanges();
     const loginLink = fixture.debugElement.query(By.css('a[routerLink="/login"]'));
     expect(loginLink).toBeNull();
+  });
+
+  it('Should have a logout button with text "Logout" when logged in', () => {
+    authService.setLoggedIn(true);
+    fixture.detectChanges();
+    const button = fixture.debugElement.query(By.css('button.logout')).nativeElement;
+    expect(button.textContent).toContain('Logout');
   });
 });
