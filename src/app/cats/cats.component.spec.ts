@@ -107,62 +107,111 @@ describe('CatsComponent', () => {
     const catService = TestBed.inject(CatService);
     spyOn(catService, 'getUserCats').and.returnValue(of(mockCats));
     localStorage.setItem('userId', '123');
-  
-    component.ngOnInit(); // It is setup so when the component first loads, the cats API is called to load the current cats from the db
-  
+
+    component.ngOnInit();
+
     expect(catService.getUserCats).toHaveBeenCalledWith('123');
     expect(component.cats.length).toBe(1);
     expect(component.cats[0].name).toBe('Whiskers');
   });
 
-  it('Should add a new cat', () => {  // Basic adding a cat
+  it('Should add a new cat', () => {
     const catService = TestBed.inject(CatService);
     spyOn(catService, 'addCat').and.callThrough();
     localStorage.setItem('userId', '123');
-  
+
     component.newCat = {
       name: 'Mittens',
       weight: '6',
       age: '3',
       breed: 'Siamese'
     };
-  
+
     component.addCat();
-  
+
     expect(catService.addCat).toHaveBeenCalled();
   });
 
   it('Should update an existing cat', () => {
     const catService = TestBed.inject(CatService);
     spyOn(catService, 'updateCat').and.callThrough();
-  
+
     const existingCat = {
       name: 'Tom',
       weight: '7',
       age: '4',
       breed: 'Persian',
-      _id: 'cat123' // Existing cats are linked in the db with the user's _id
+      _id: 'cat123'
     };
-  
+
     component.cats = [existingCat];
     component.newCat = { ...existingCat, name: 'Tommy' };
-  
+
     component.addCat();
-  
-    expect(catService.updateCat).toHaveBeenCalledWith('cat123', jasmine.any(Object)); // Make sure it is properly updated in db by using the _id
+
+    expect(catService.updateCat).toHaveBeenCalledWith('cat123', jasmine.any(Object));
   });
 
   it('Should delete a cat after confirmation', () => {
-    spyOn(window, 'confirm').and.returnValue(true); // Confirmation is required to delete the cat
+    spyOn(window, 'confirm').and.returnValue(true);
     const catService = TestBed.inject(CatService);
     spyOn(catService, 'deleteCat').and.callThrough();
-  
+
     const catToDelete = { name: 'Fluffy', weight: 5, age: 3, breed: 'Persian', _id: '12345' };
     component.cats = [catToDelete];
-  
+
     component.deleteCat(catToDelete, new MouseEvent('click'));
-  
+
     expect(catService.deleteCat).toHaveBeenCalledWith('12345');
   });
 
+  it('Should detect user is logged in on init', () => {
+    const authService = TestBed.inject(AuthService) as MockAuthService;
+    expect(authService.getLoggedInValue()).toBeTrue();
+  });
+
+  it('Should reset newCat after adding a cat', () => {
+    const catService = TestBed.inject(CatService);
+    spyOn(catService, 'addCat').and.callThrough();
+    localStorage.setItem('userId', '123');
+
+    component.newCat = {
+      name: 'Simba',
+      weight: '8',
+      age: '5',
+      breed: 'Maine Coon'
+    };
+
+    component.addCat();
+
+    expect(component.newCat).toEqual({ name: '', weight: '', age: '', breed: '' });
+  });
+
+  it('Should not delete cat if confirmation is canceled', () => {
+    spyOn(window, 'confirm').and.returnValue(false);
+    const catService = TestBed.inject(CatService);
+    spyOn(catService, 'deleteCat');
+
+    const cat = { name: 'Luna', weight: 4, age: 2, breed: 'Ragdoll', _id: '321' };
+    component.cats = [cat];
+
+    component.deleteCat(cat, new MouseEvent('click'));
+
+    expect(catService.deleteCat).not.toHaveBeenCalled();
+  });
+
+  it('Should start with no cats', () => {
+    expect(component.cats).toEqual([]);
+  });
+
+  it('Should not load cats if userId is null', () => {
+    const catService = TestBed.inject(CatService);
+    spyOn(catService, 'getUserCats');
+
+    localStorage.removeItem('userId');
+
+    component.ngOnInit();
+
+    expect(catService.getUserCats).not.toHaveBeenCalled();
+  });
 });
