@@ -218,4 +218,11 @@ describe('CatsComponent', () => {
   it('Should initialize newCat with empty values', () => {
     expect(component.newCat).toEqual({ name: '', weight: '', age: '', breed: '' });
   });
+
+  it('Should load selected cat into newCat when editCat is called', () => {
+    const cat = { name: 'Kitty', weight: '4', age: '1', breed: 'Domestic', _id: 'xyz' };
+    component.cats = [cat];
+    component.editCat(cat);
+    expect(component.newCat).toEqual(cat);
+  });
 });
