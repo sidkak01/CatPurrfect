@@ -58,9 +58,7 @@ describe('RegisterComponent', () => {
     spyOn(window, 'alert');
     component.password = '12345';
     component.confirmPassword = '1234567';
-
     component.onRegister();
-
     expect(window.alert).toHaveBeenCalledWith('Passwords do not match');
     expect(component['userService'].register).not.toHaveBeenCalled();
   });
@@ -72,9 +70,7 @@ describe('RegisterComponent', () => {
     component.email = 'sprinttest@example.com';
     component.password = 'pass123';
     component.confirmPassword = 'pass123';
-
     component.resetForm();
-
     expect(component.firstName).toBe('');
     expect(component.lastName).toBe('');
     expect(component.username).toBe('');
@@ -85,16 +81,13 @@ describe('RegisterComponent', () => {
 
   it('Should call register and navigate on successful registration', () => {
     spyOn(window, 'alert');
-
     component.firstName = 'Test';
     component.lastName = 'User';
     component.username = 'test1';
     component.email = 'test1@example.com';
     component.password = '123456';
     component.confirmPassword = '123456';
-
     component.onRegister();
-
     expect(component['userService'].register).toHaveBeenCalledWith({
       firstName: 'Test',
       lastName: 'User',
@@ -102,30 +95,25 @@ describe('RegisterComponent', () => {
       email: 'test1@example.com',
       password: '123456'
     });
-
     expect(component['authService'].setLoggedIn).toHaveBeenCalledWith(true);
     expect(window.alert).toHaveBeenCalledWith('Registration Successful!');
   });
 
   it('Should show alert on registration failure (user already exists)', () => {
     spyOn(window, 'alert');
-
     const userService = TestBed.inject(UserService) as jasmine.SpyObj<UserService>;
     userService.register.and.returnValue(
       throwError(() => ({
         error: { message: 'User already exists' }
       }))
     );
-
     component.firstName = 'Test';
     component.lastName = 'User';
     component.username = 'test1';
     component.email = 'test1@example.com';
     component.password = '123456';
     component.confirmPassword = '123456';
-
     component.onRegister();
-
     expect(window.alert).toHaveBeenCalledWith('Registration failed: User already exists');
   });
 
@@ -162,5 +150,12 @@ describe('RegisterComponent', () => {
       const input = fixture.debugElement.query(By.css(selector));
       expect(input).toBeTruthy();
     });
+  });
+
+  it('Should call onRegister when submit button is clicked', () => {
+    spyOn(component, 'onRegister');
+    const button = fixture.debugElement.query(By.css('button[type="submit"]'));
+    button.triggerEventHandler('click', null);
+    expect(component.onRegister).toHaveBeenCalled();
   });
 });
