@@ -214,4 +214,8 @@ describe('CatsComponent', () => {
 
     expect(catService.getUserCats).not.toHaveBeenCalled();
   });
+
+  it('Should initialize newCat with empty values', () => {
+    expect(component.newCat).toEqual({ name: '', weight: '', age: '', breed: '' });
+  });
 });
