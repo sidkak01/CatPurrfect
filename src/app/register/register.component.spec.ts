@@ -158,4 +158,8 @@ describe('RegisterComponent', () => {
     button.triggerEventHandler('click', null);
     expect(component.onRegister).toHaveBeenCalled();
   });
+
+  it('Should match snapshot of component HTML', () => {
+    expect(fixture.nativeElement.innerHTML).toMatchSnapshot();
+  });
 });
