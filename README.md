@@ -15,7 +15,7 @@ Then, start the server and webpage with:
 npm run serve:ssr:CatPurrfect
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:5000/`. The application will automatically reload whenever you modify any of the source files.
+Once the server is running, open your browser and navigate to `http://localhost:5000/`. Create an account and get started adding and tracking your cats!
 
 Project Name: CatPurrfect 
 
