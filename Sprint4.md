@@ -26,7 +26,9 @@
 ### Frontend Unit Tests
 
 <details> <summary>Click to show/hide Frontend Unit Tests</summary>
+
 ### Navbar Component Unit Tests:
+
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -534,6 +536,7 @@ describe('LoginComponent', () => {
 });
 ```
 ### Cats Component Unit Tests:
+
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
