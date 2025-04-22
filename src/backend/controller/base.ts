@@ -2,11 +2,9 @@ import { Request, Response } from 'express';
 import { Model } from 'mongoose';
 
 abstract class BaseCtrl<T> {
+  abstract model: Model<T>;
 
-  abstract model:Model<T>
-
-
-  getAll = async (req: Request, res: Response) => {
+  getAll = async (req: Request, res: Response): Promise<Response> => {
     try {
       const docs = await this.model.find({});
       return res.status(200).json(docs);
@@ -15,7 +13,7 @@ abstract class BaseCtrl<T> {
     }
   };
 
-  count = async (req: Request, res: Response) => {
+  count = async (_req: Request, res: Response): Promise<Response> => {
     try {
       const count = await this.model.countDocuments();
       return res.status(200).json(count);
@@ -24,8 +22,7 @@ abstract class BaseCtrl<T> {
     }
   };
 
-
-  insert = async (req: Request, res: Response) => {
+  insert = async (req: Request, res: Response): Promise<Response> => {
     try {
       const obj = await new this.model(req.body).save();
       return res.status(201).json(obj);
@@ -34,8 +31,7 @@ abstract class BaseCtrl<T> {
     }
   };
 
-
-  get = async (req: Request, res: Response) => {
+  get = async (req: Request, res: Response): Promise<Response> => {
     try {
       const obj = await this.model.findOne({ _id: req.params.id });
       return res.status(200).json(obj);
@@ -44,8 +40,7 @@ abstract class BaseCtrl<T> {
     }
   };
 
-  
-  update = async (req: Request, res: Response) => {
+  update = async (req: Request, res: Response): Promise<Response> => {
     try {
       await this.model.findOneAndUpdate({ _id: req.params.id }, req.body);
       return res.sendStatus(200);
@@ -54,7 +49,7 @@ abstract class BaseCtrl<T> {
     }
   };
 
-  delete = async (req: Request, res: Response) => {
+  delete = async (req: Request, res: Response): Promise<Response> => {
     try {
       await this.model.findOneAndDelete({ _id: req.params.id });
       return res.sendStatus(200);
@@ -63,7 +58,7 @@ abstract class BaseCtrl<T> {
     }
   };
 
-  deleteAll = async (_req: Request, res: Response) => {
+  deleteAll = async (_req: Request, res: Response): Promise<Response> => {
     try {
       await this.model.deleteMany();
       return res.sendStatus(200);

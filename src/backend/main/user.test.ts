@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { describe, expect, test } from '@jest/globals';
+import { describe, expect, test, beforeAll, afterAll } from '@jest/globals';
 process.env.NODE_ENV = 'test';
 
 import { app } from '../app';
@@ -23,28 +23,33 @@ describe('User tests', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body).toStrictEqual([]);
   });
+
   test('should count all users', async () => {
     const res = await request(app).get('/api/users/count');
     expect(res.statusCode).toBe(200);
-    expect(res.body).toStrictEqual(0);
+    expect(res.body).toBe(0);
   });
+
   test('should create a new user', async () => {
     const res = await request(app).post('/api/user').send(newUser);
     expect(res.statusCode).toBe(201);
     expect(res.body).toMatchObject(newUser);
     userId = res.body._id;
   });
+
   test('should get a user by id', async () => {
-    const res = await request(app).get('/api/user/${userId}');
+    const res = await request(app).get(`/api/user/${userId}`);
     expect(res.statusCode).toBe(200);
     expect(res.body).toMatchObject(newUser);
   });
+
   test('should update a user by id', async () => {
-    const res = await request(app).put('/api/user/${userId}').send({ username: 'siddharth' });
+    const res = await request(app).put(`/api/user/${userId}`).send({ username: 'siddharth' });
     expect(res.statusCode).toBe(200);
   });
+
   test('should delete a user by id', async () => {
-    const res = await request(app).delete('/api/user/${userId}');
+    const res = await request(app).delete(`/api/user/${userId}`);
     expect(res.statusCode).toBe(200);
   });
 });
