@@ -1,48 +1,67 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = require("tslib");
-const supertest_1 = tslib_1.__importDefault(require("supertest"));
-const globals_1 = require("@jest/globals");
-process.env.NODE_ENV = 'test';
-const app_1 = require("../../app");
-const mongo_1 = require("../../mongo");
-const newUser = { firstName: 'John', lastName: 'Doe', username: 'JohnDoe', email: 'sidnigade@gmail.com', password: "password123", role: 'user' };
-let userId = '';
+
+import request from "supertest";
+import { describe, test, expect, beforeAll, afterAll } from "@jest/globals";
+import { app } from "../../app";
+import { connectToMongo, disconnectMongo } from "../../mongo";
+
+process.env.NODE_ENV = "test";
+
+const newUser = {
+  firstName: "Siddharth",
+  lastName: "Nigade",
+  username: "SiddharthNigade",
+  email: "sidnigade@gmail.com",
+  password: "password123",
+  role: "user",
+};
+
+let userId = "";
+
 beforeAll(async () => {
-    await (0, mongo_1.connectToMongo)();
+  await connectToMongo();
 });
+
 afterAll(async () => {
-    await (0, supertest_1.default)(app_1.app).delete('/api/users/delete');
-    await (0, mongo_1.disconnectMongo)();
+  await request(app).delete("/api/users/delete");
+  await disconnectMongo();
 });
-(0, globals_1.describe)('User tests', () => {
-    (0, globals_1.test)('should get all users', async () => {
-        const res = await (0, supertest_1.default)(app_1.app).get('/api/users');
-        (0, globals_1.expect)(res.statusCode).toBe(200);
-        (0, globals_1.expect)(res.body).toStrictEqual([]);
-    });
-    (0, globals_1.test)('should count all users', async () => {
-        const res = await (0, supertest_1.default)(app_1.app).get('/api/users/count');
-        (0, globals_1.expect)(res.statusCode).toBe(200);
-        (0, globals_1.expect)(res.body).toStrictEqual(0);
-    });
-    (0, globals_1.test)('should create a new user', async () => {
-        const res = await (0, supertest_1.default)(app_1.app).post('/api/user').send(newUser);
-        (0, globals_1.expect)(res.statusCode).toBe(201);
-        (0, globals_1.expect)(res.body).toMatchObject(newUser);
-        userId = res.body._id;
-    });
-    (0, globals_1.test)('should get a user by id', async () => {
-        const res = await (0, supertest_1.default)(app_1.app).get(`/api/user/${userId}`);
-        (0, globals_1.expect)(res.statusCode).toBe(200);
-        (0, globals_1.expect)(res.body).toMatchObject(newUser);
-    });
-    (0, globals_1.test)('should update a user by id', async () => {
-        const res = await (0, supertest_1.default)(app_1.app).put(`/api/user/${userId}`).send({ username: 'JohnDoe' });
-        (0, globals_1.expect)(res.statusCode).toBe(200);
-    });
-    (0, globals_1.test)('should delete a user by id', async () => {
-        const res = await (0, supertest_1.default)(app_1.app).delete(`/api/user/${userId}`);
-        (0, globals_1.expect)(res.statusCode).toBe(200);
-    });
+
+describe("User tests", () => {
+  test("should get all users", async () => {
+    const res = await request(app).get("/api/users");
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toStrictEqual([]);
+  });
+
+  test("should count all users", async () => {
+    const res = await request(app).get("/api/users/count");
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toStrictEqual(0);
+  });
+
+  test("should create a new user", async () => {
+    const res = await request(app).post("/api/user").send(newUser);
+    expect(res.statusCode).toBe(201);
+    expect(res.body).toMatchObject(newUser);
+    userId = res.body._id;
+  });
+
+  test("should get a user by id", async () => {
+    const res = await request(app).get(`/api/user/${userId}`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toMatchObject(newUser);
+  });
+
+  test("should update a user by id", async () => {
+    const res = await request(app)
+      .put(`/api/user/${userId}`)
+      .send({ username: "JohnDoe" });
+    expect(res.statusCode).toBe(200);
+  });
+
+  test("should delete a user by id", async () => {
+    const res = await request(app).delete(`/api/user/${userId}`);
+    expect(res.statusCode).toBe(200);
+  });
 });
