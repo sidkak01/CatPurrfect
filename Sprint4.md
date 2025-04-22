@@ -1107,6 +1107,8 @@ describe('Cat Location Management', () => {
 <details> <summary>Click to show backend unit tests</summary>
 
 ### Cats test
+
+```javascript
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
@@ -1179,9 +1181,11 @@ afterAll(async () => {
     });
 });
 //# sourceMappingURL=cats.spec.js.map
+```
 
 ### Users test
 
+```javascript
 "use strict";
 
 import request from "supertest";
@@ -1249,6 +1253,7 @@ describe("User tests", () => {
     expect(res.statusCode).toBe(200);
   });
 });
+```
 
 </details>
 
