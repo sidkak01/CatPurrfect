@@ -25,7 +25,7 @@
 
 ### Frontend Unit Tests
 
-<details> <summary>Click to show/hide Frontend Unit Tests</summary>
+<details> <summary>Click to show frontend unit and Cypress tests</summary>
 
 ### Navbar Component Unit Tests:
 
@@ -872,6 +872,227 @@ describe('HomeComponent', () => {
 
 });
 ```
+
+### Login Component Cyprus Test:
+```typescript
+import { LoginComponent } from '../../src/app/login/login.component';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+
+// Mock component for the cats route
+@Component({ template: '<div>Cats Component</div>' })
+class MockCatsComponent {}
+
+describe('LoginComponent', () => {
+  beforeEach(() => {
+    // Login success navigates to cats page so create a mock route
+    const routes = [
+      { path: 'cats', component: MockCatsComponent }
+    ];
+
+    cy.mount(LoginComponent, {
+      imports: [
+        FormsModule, 
+        HttpClientModule, 
+        RouterTestingModule.withRoutes(routes)
+      ]
+    });
+
+    cy.window().then(win => {
+      cy.stub(win, 'alert').as('alertSpy');
+      cy.stub(win.console, 'log').as('consoleLog');
+    });
+  });
+
+  it('Should mount the component', () => {
+    cy.get('h2').should('contain.text', 'Login');
+  });
+
+  it('Should have all form fields', () => {
+    cy.get('input[name="email"]').should('exist');
+    cy.get('input[name="password"]').should('exist');
+    cy.get('button[type="submit"]').should('exist');
+  });
+
+  it('Should allow filling out the form', () => {
+    cy.get('input[name="email"]').type('testuser@example.com');
+    cy.get('input[name="password"]').type('password123');
+    
+    cy.get('input[name="email"]').should('have.value', 'testuser@example.com');
+    cy.get('input[name="password"]').should('have.value', 'password123');
+  });
+
+  it('Should have navigation links', () => {
+    cy.get('a[routerLink="/login"]').should('contain.text', 'Click Here to Reset');
+    cy.get('a[routerLink="/register"]').should('contain.text', 'Register');
+  });
+
+  it('Should handle login button click', () => {
+    cy.get('input[name="email"]').type('testuser@example.com');
+    cy.get('input[name="password"]').type('password123');
+    
+    cy.get('button[type="submit"]').click();
+    
+    cy.get('@alertSpy').should('be.calledWith', 'Login Successful!');
+    cy.get('@consoleLog').should('be.called');
+  });
+});
+```
+
+### Commands.ts with login() function for E2E testing:
+```typescript
+Cypress.Commands.add('login', () => {
+    cy.visit('/login');
+    cy.get('input[name="email"]').type('test@example.com');
+    cy.get('input[name="password"]').type('password123');
+    cy.contains('button', 'Login').click();
+    cy.url().should('include', '/cats');
+  });
+
+  declare namespace Cypress {
+    interface Chainable<Subject = any> {
+      login(): Chainable<void>
+    }
+  }
+```
+
+### Add Cats E2E Test:
+#### (Was formerly a component test in Sprint 3 before advanced authentication was added)
+```typescript
+import '../support/commands';
+
+describe('Cat Management', () => {
+    beforeEach(() => {
+        cy.login();
+        cy.contains('h3', 'Add New Cat').should('be.visible');
+      });
+  
+    it('Should add a new cat', () => {
+      cy.contains('h3', 'Add New Cat').should('be.visible');
+      
+      cy.get('input[name="name"]').type('Whiskers');
+      cy.get('input[name="weight"]').type('10 lbs');
+      cy.get('input[name="age"]').type('3 years');
+      cy.get('select[name="breed"]').select('Maine Coon');
+      
+      cy.contains('button', 'Add').click();
+      
+      cy.contains('.card-title', 'Whiskers').should('be.visible');
+      cy.contains('.card-text', 'Breed: Maine Coon').should('be.visible');
+      cy.contains('.card-text', 'Age: 3 years').should('be.visible');
+      cy.contains('.card-text', 'Weight: 10 lbs').should('be.visible');
+      
+      cy.get('input[name="name"]').should('have.value', '');
+      cy.get('input[name="weight"]').should('have.value', '');
+      cy.get('input[name="age"]').should('have.value', '');
+    });
+  
+    it('Should require a cat name', () => {
+      cy.contains('button', 'Add').click();
+      
+      cy.get('.card-title').should('not.exist');
+      
+      cy.get('input[name="name"]').type('Mittens');
+      cy.get('input[name="weight"]').type('20 lbs');
+      cy.get('input[name="age"]').type('5 years');
+      cy.get('select[name="breed"]').select('Maine Coon');
+      cy.contains('button', 'Add').click();
+      
+      cy.contains('.card-title', 'Mittens').should('be.visible');
+    });
+  
+    it('Should select a cat when clicked', () => {
+      cy.get('input[name="name"]').type('Felix');
+      cy.get('input[name="weight"]').type('15 lbs');
+      cy.get('input[name="age"]').type('1 years');
+      cy.get('select[name="breed"]').select('Maine Coon');
+      cy.contains('button', 'Add').click();
+      
+      cy.contains('.card-title', 'Felix').click();
+      
+      cy.contains('.card-title', 'Felix')
+        .parents('.card')
+        .should('have.class', 'selected-cat');
+      
+    });
+  });
+```
+
+### Add Cats Location E2E Test:
+```typescript
+import '../support/commands';
+
+describe('Cat Location Management', () => {
+    beforeEach(() => {
+        cy.login();
+      
+      // Add a test cat
+      cy.get('input[name="name"]').type('Tiger');
+      cy.get('input[name="weight"]').type('12 lbs');
+      cy.get('input[name="age"]').type('5 years');
+      cy.get('select[name="breed"]').select('Bengal');
+      cy.contains('button', 'Add').click();
+    });
+  
+    it('Should add a location to a cat', () => {
+      cy.contains('.card-title', 'Tiger').click();
+      
+      cy.get('google-map')
+        .should('be.visible')
+        .then(($map) => {
+            const rect = $map[0].getBoundingClientRect();
+    
+            cy.get('body').click(rect.left + 500, rect.top + 200);
+
+            cy.wait(500);
+        
+        cy.contains('.location-badge', 'Location Added')
+          .should('be.visible')
+          .should('exist');
+        });
+    });
+
+    it('Should persist the location after deselecting and selecting again', () => {
+        cy.contains('.card-title', 'Tiger').click();
+        
+        cy.get('google-map')
+          .should('be.visible')
+          .then(($map) => {
+            const rect = $map[0].getBoundingClientRect();
+            cy.get('body').click(rect.left + 500, rect.top + 200);
+          });
+        
+        cy.contains('.location-badge', 'Location Added').should('be.visible');
+        
+        // Deselect the cat by clicking outside the map
+        cy.get('h3').first().click();
+        
+        cy.contains('.card-title', 'Tiger').click();
+        
+        cy.contains('.location-badge', 'Location Added').should('be.visible');
+      });
+      
+      it('Should display marker on the map after adding location', () => {
+        cy.contains('.card-title', 'Tiger').click();
+        
+        cy.get('google-map')
+          .should('be.visible')
+          .then(($map) => {
+            const rect = $map[0].getBoundingClientRect();
+            cy.get('body').click(rect.left + 500, rect.top + 200);
+          });
+        
+        cy.contains('.location-badge', 'Location Added').should('be.visible');
+        
+        cy.get('google-map').should('be.visible');
+      });
+    
+   });
+```
+
 </details>
 
 ## Backend:
@@ -881,6 +1102,11 @@ describe('HomeComponent', () => {
 - Executed DB Tests
 - Executed Unit Tests for AddCat API
 - Executed Unit Tests for GetAllCats API
+
+### Backend Unit Tests
+<details> <summary>Click to show backend unit tests</summary>
+
+</details>
 
 # Sprint 4 Backend API Documentation
 
