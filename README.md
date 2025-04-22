@@ -4,7 +4,7 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 
 ## Development server
 
-To run the backend and frontend, first build the project with:
+To run the backend and frontend, once you have cloned the repo, first build the project with:
 
 ```bash
 npm run build
